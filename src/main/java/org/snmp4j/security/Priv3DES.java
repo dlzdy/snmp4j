@@ -1,8 +1,8 @@
 /*_############################################################################
   _## 
-  _##  SNMP4J - Priv3DES.java  
+  _##  SNMP4J 2 - Priv3DES.java  
   _## 
-  _##  Copyright (C) 2003-2018  Frank Fock and Jochen Katz (SNMP4J.org)
+  _##  Copyright (C) 2003-2016  Frank Fock and Jochen Katz (SNMP4J.org)
   _##  
   _##  Licensed under the Apache License, Version 2.0 (the "License");
   _##  you may not use this file except in compliance with the License.
@@ -55,7 +55,6 @@ public class Priv3DES extends PrivacyGeneric {
   private static final int INIT_VECTOR_LENGTH = 8;
   private static final int INPUT_KEY_LENGTH = 32;
   private static final int KEY_LENGTH = 24;
-  private static final long serialVersionUID = 1797798503363181119L;
   protected Salt salt;
 
   private static final LogAdapter logger = LogFactory.getLogger(Priv3DES.class);

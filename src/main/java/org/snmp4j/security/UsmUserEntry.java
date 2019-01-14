@@ -1,8 +1,8 @@
 /*_############################################################################
   _## 
-  _##  SNMP4J - UsmUserEntry.java  
+  _##  SNMP4J 2 - UsmUserEntry.java  
   _## 
-  _##  Copyright (C) 2003-2018  Frank Fock and Jochen Katz (SNMP4J.org)
+  _##  Copyright (C) 2003-2016  Frank Fock and Jochen Katz (SNMP4J.org)
   _##  
   _##  Licensed under the Apache License, Version 2.0 (the "License");
   _##  you may not use this file except in compliance with the License.
@@ -30,9 +30,9 @@ import org.snmp4j.smi.OID;
  * Local Configuration Datastore (LCD).
  *
  * @author Frank Fock
- * @version 3.0.6
+ * @version 2.5.7
  */
-public class UsmUserEntry implements Serializable, Comparable<UsmUserEntry> {
+public class UsmUserEntry implements Serializable, Comparable {
 
   private static final long serialVersionUID = -3021438367015187166L;
 
@@ -159,13 +159,14 @@ public class UsmUserEntry implements Serializable, Comparable<UsmUserEntry> {
    * Compares this user entry with another one by engine ID then by their user
    * names.
    *
-   * @param other
+   * @param o
    *    a <code>UsmUserEntry</code> instance.
    * @return
    *    a negative integer, zero, or a positive integer as this object is
    *    less than, equal to, or greater than the specified object.
    */
-  public int compareTo(UsmUserEntry other) {
+  public int compareTo(Object o) {
+    UsmUserEntry other = (UsmUserEntry)o;
     int result = 0;
     if ((engineID != null) && (other.engineID != null)) {
       result = engineID.compareTo(other.engineID);

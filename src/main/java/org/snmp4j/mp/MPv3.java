@@ -1,8 +1,8 @@
 /*_############################################################################
   _## 
-  _##  SNMP4J - MPv3.java  
+  _##  SNMP4J 2 - MPv3.java  
   _## 
-  _##  Copyright (C) 2003-2018  Frank Fock and Jochen Katz (SNMP4J.org)
+  _##  Copyright (C) 2003-2016  Frank Fock and Jochen Katz (SNMP4J.org)
   _##  
   _##  Licensed under the Apache License, Version 2.0 (the "License");
   _##  you may not use this file except in compliance with the License.
@@ -501,7 +501,6 @@ public class MPv3
    * @version 1.0
    */
   protected static class CacheEntry extends StateReference {
-    private static final long serialVersionUID = 8698046643337640719L;
     int msgID;
     long transactionID;
     byte[] secEngineID;
@@ -806,7 +805,6 @@ public class MPv3
                     localEngineID.toHexString());
               }
               scopedPDU.setContextEngineID(localEngineID);
-              break;
             }
             default:
               if (logger.isDebugEnabled()) {
@@ -1420,7 +1418,7 @@ public class MPv3
           }
           else if (!securityEngineID.equalsValue(localEngineID)) {
             if (logger.isDebugEnabled()) {
-              logger.debug("RFC3412 §7.2.13.a - Security engine ID " +
+              logger.debug("RFC 3412 §7.2.13.a - Security engine ID " +
                            securityEngineID.toHexString() +
                            " does not match local engine ID " +
                            new OctetString(localEngineID).toHexString());
@@ -1468,6 +1466,29 @@ public class MPv3
    */
   public SecurityModels getSecurityModels() {
     return securityModels;
+  }
+
+  /**
+   * Gets the enterprise ID used for creating the local engine ID.
+   * @return
+   *    an enterprise ID as registered by the IANA (see http://www.iana.org).
+   * @deprecated
+   *    Use {@link SNMP4JSettings#getEnterpriseID()} instead.
+   */
+  public static int getEnterpriseID() {
+    return SNMP4JSettings.getEnterpriseID();
+  }
+
+  /**
+   * Sets the IANA enterprise ID to be used for creating local engine ID by
+   * {@link #createLocalEngineID()}.
+   * @param newEnterpriseID
+   *    an enterprise ID as registered by the IANA (see http://www.iana.org).
+   * @deprecated
+   *    Use {@link SNMP4JSettings#setEnterpriseID(int)} instead.
+   */
+  public static void setEnterpriseID(int newEnterpriseID) {
+    SNMP4JSettings.setEnterpriseID(newEnterpriseID);
   }
 
   /**
@@ -1558,7 +1579,6 @@ public class MPv3
    * @deprecated
    *    Use {@link org.snmp4j.util.DefaultPDUFactory#createPDU(MessageProcessingModel, int)} instead.
    */
-  @Deprecated
   public PDU createPDU(Target target) {
     return incomingPDUFactory.createPDU(target);
   }

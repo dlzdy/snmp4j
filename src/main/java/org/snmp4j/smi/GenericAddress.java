@@ -1,8 +1,8 @@
 /*_############################################################################
   _## 
-  _##  SNMP4J - GenericAddress.java  
+  _##  SNMP4J 2 - GenericAddress.java  
   _## 
-  _##  Copyright (C) 2003-2018  Frank Fock and Jochen Katz (SNMP4J.org)
+  _##  Copyright (C) 2003-2016  Frank Fock and Jochen Katz (SNMP4J.org)
   _##  
   _##  Licensed under the Apache License, Version 2.0 (the "License");
   _##  you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ import org.snmp4j.SNMP4JSettings;
  * for the first time.
  *
  * @author Frank Fock
- * @version 3.0
+ * @version 1.8
  */
 public class GenericAddress extends SMIAddress {
 
@@ -57,11 +57,6 @@ public class GenericAddress extends SMIAddress {
    * Default address type identifier for an TlsAddress.
    */
   public static final String TYPE_TLS = "tls";
-
-  /**
-   * Default address type identifier for an DtlsAddress.
-   */
-  public static final String TYPE_DTLS = "dtls";
 
   public static final String ADDRESS_TYPES_PROPERTIES =
       "org.snmp4j.addresses";
@@ -143,8 +138,8 @@ public class GenericAddress extends SMIAddress {
       try {
         props.load(is);
         Map<String, Class<? extends Address>> h = new TreeMap<String, Class<? extends Address>>();
-        for (Iterator<String> en = props.stringPropertyNames().iterator(); en.hasNext(); ) {
-          String id = en.next();
+        for (Enumeration en = props.propertyNames(); en.hasMoreElements(); ) {
+          String id = en.nextElement().toString();
           String className = props.getProperty(id);
           try {
             Class<? extends Address> c = (Class<? extends Address>)Class.forName(className);
@@ -180,7 +175,6 @@ public class GenericAddress extends SMIAddress {
       h.put(TYPE_TCP, TcpAddress.class);
       h.put(TYPE_IP, IpAddress.class);
       h.put(TYPE_TLS, TlsAddress.class);
-      h.put(TYPE_DTLS, DtlsAddress.class);
       knownAddressTypes = h;
     }
   }
@@ -219,7 +213,7 @@ public class GenericAddress extends SMIAddress {
       throw new IllegalArgumentException("Address type " + type + " unknown");
     }
     try {
-      Address addr = c.getDeclaredConstructor().newInstance();
+      Address addr = c.newInstance();
       if (addr.parseAddress(address)) {
         return addr;
       }

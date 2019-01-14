@@ -1,8 +1,8 @@
 /*_############################################################################
   _## 
-  _##  SNMP4J - UdpTransportMapping.java  
+  _##  SNMP4J 2 - UdpTransportMapping.java  
   _## 
-  _##  Copyright (C) 2003-2018  Frank Fock and Jochen Katz (SNMP4J.org)
+  _##  Copyright (C) 2003-2016  Frank Fock and Jochen Katz (SNMP4J.org)
   _##  
   _##  Licensed under the Apache License, Version 2.0 (the "License");
   _##  you may not use this file except in compliance with the License.
@@ -22,53 +22,50 @@ package org.snmp4j.transport;
 
 import org.snmp4j.TransportStateReference;
 import org.snmp4j.smi.Address;
-
 import java.io.IOException;
-
 import org.snmp4j.smi.UdpAddress;
 
 /**
  * The <code>UdpTransportMapping</code> is the abstract base class for
  * UDP transport mappings.
- *
  * @author Frank Fock
- * @version 3.0
+ * @version 1.0
  */
 
 public abstract class UdpTransportMapping
-        extends AbstractTransportMapping<UdpAddress> {
+    extends AbstractTransportMapping<UdpAddress> {
 
-    protected UdpAddress udpAddress;
+  protected UdpAddress udpAddress;
 
-    public UdpTransportMapping(UdpAddress udpAddress) {
-        this.udpAddress = udpAddress;
-    }
+  public UdpTransportMapping(UdpAddress udpAddress) {
+    this.udpAddress = udpAddress;
+  }
 
-    public Class<? extends Address> getSupportedAddressClass() {
-        return UdpAddress.class;
-    }
+  public Class<? extends Address> getSupportedAddressClass() {
+    return UdpAddress.class;
+  }
 
-    /**
-     * Returns the transport address that is configured for this transport mapping for
-     * sending and receiving messages.
-     *
-     * @return the <code>Address</code> used by this transport mapping. The returned
-     * instance must not be modified!
-     */
-    public UdpAddress getAddress() {
-        return udpAddress;
-    }
+  /**
+   * Returns the transport address that is configured for this transport mapping for
+   * sending and receiving messages.
+   * @return
+   *    the <code>Address</code> used by this transport mapping. The returned
+   *    instance must not be modified!
+   */
+  public UdpAddress getAddress() {
+    return udpAddress;
+  }
 
-    public UdpAddress getListenAddress() {
-        return udpAddress;
-    }
+  public UdpAddress getListenAddress() {
+    return udpAddress;
+  }
 
-    public abstract void listen() throws IOException;
+  public abstract void listen() throws IOException;
 
-    public abstract void close() throws IOException;
+  public abstract void close() throws IOException;
 
-    public abstract void sendMessage(UdpAddress address, byte[] message,
-                                     TransportStateReference tmStateReference, long timeoutMillis, int maxRetries)
-            throws IOException;
+  public abstract void sendMessage(UdpAddress address, byte[] message,
+                                   TransportStateReference tmStateReference)
+      throws IOException;
 
 }

@@ -1,8 +1,8 @@
 /*_############################################################################
   _## 
-  _##  SNMP4J - AuthHMAC192SHA256.java  
+  _##  SNMP4J 2 - AuthHMAC192SHA256.java  
   _## 
-  _##  Copyright (C) 2003-2018  Frank Fock and Jochen Katz (SNMP4J.org)
+  _##  Copyright (C) 2003-2016  Frank Fock and Jochen Katz (SNMP4J.org)
   _##  
   _##  Licensed under the Apache License, Version 2.0 (the "License");
   _##  you may not use this file except in compliance with the License.
@@ -35,7 +35,6 @@ public class AuthHMAC192SHA256 extends AuthSHA2 {
   private static final int DIGEST_LENGTH = 32;
   private static final int AUTH_CODE_LENGTH = 24;
   private static final int HMAC_BLOCK_SIZE = AuthGeneric.HMAC_BLOCK_SIZE;
-  private static final long serialVersionUID = 2238331128113354928L;
 
   /**
    * Creates an usmHMAC192SHA256AuthProtocol implementation.

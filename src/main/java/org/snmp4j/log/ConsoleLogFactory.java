@@ -1,8 +1,8 @@
 /*_############################################################################
   _## 
-  _##  SNMP4J - ConsoleLogFactory.java  
+  _##  SNMP4J 2 - ConsoleLogFactory.java  
   _## 
-  _##  Copyright (C) 2003-2018  Frank Fock and Jochen Katz (SNMP4J.org)
+  _##  Copyright (C) 2003-2016  Frank Fock and Jochen Katz (SNMP4J.org)
   _##  
   _##  Licensed under the Apache License, Version 2.0 (the "License");
   _##  you may not use this file except in compliance with the License.
@@ -20,8 +20,8 @@
 package org.snmp4j.log;
 
 /**
- * The <code>ConsoleLogFactory</code> implements a SNMP4J LogFactory for
- * system out. In order to use simple stdout logging for SNMP4J, the
+ * The <code>Log4jLogFactory</code> implements a SNMP4J LogFactory for
+ * Log4J. In order to use Log4J for logging SNMP4J log messages the
  * static {@link LogFactory#setLogFactory} method has to be used before
  * any SNMP4J class is referenced or instantiated.
  *
@@ -36,7 +36,7 @@ public class ConsoleLogFactory extends LogFactory {
   public ConsoleLogFactory() {
   }
 
-  protected LogAdapter createLogger(Class<?> c) {
+  protected LogAdapter createLogger(Class c) {
     return logAdapter;
   }
 

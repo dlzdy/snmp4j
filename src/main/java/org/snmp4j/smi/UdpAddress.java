@@ -1,8 +1,8 @@
 /*_############################################################################
   _## 
-  _##  SNMP4J - UdpAddress.java  
+  _##  SNMP4J 2 - UdpAddress.java  
   _## 
-  _##  Copyright (C) 2003-2018  Frank Fock and Jochen Katz (SNMP4J.org)
+  _##  Copyright (C) 2003-2016  Frank Fock and Jochen Katz (SNMP4J.org)
   _##  
   _##  Licensed under the Apache License, Version 2.0 (the "License");
   _##  you may not use this file except in compliance with the License.
@@ -20,70 +20,45 @@
 package org.snmp4j.smi;
 
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 /**
  * The <code>UdpAddress</code> represents UDP/IP transport addresses.
- *
  * @author Frank Fock
- * @version 3.0
+ * @version 1.8.3
  */
 public class UdpAddress extends TransportIpAddress {
 
-    static final long serialVersionUID = -4390734262648716203L;
+  static final long serialVersionUID = -4390734262648716203L;
 
-    /**
-     * Creates an empty UdpAddress without {@link #getInetAddress()} and zero port.
-     */
-    public UdpAddress() {
-    }
+  public UdpAddress() {
+  }
 
-    /**
-     * Create a UdpAddress from the given {@link InetAddress} and port.
-     * @param inetAddress
-     *    the IP address portion of the UDP address to create.
-     * @param port
-     *    the UDP port.
-     */
-    public UdpAddress(InetAddress inetAddress, int port) {
-        setInetAddress(inetAddress);
-        setPort(port);
-    }
+  public UdpAddress(InetAddress inetAddress, int port) {
+    setInetAddress(inetAddress);
+    setPort(port);
+  }
 
-    /**
-     * Create a UdpAddress for the local host ({@link InetAddress#getLocalHost()}
-     * with the provided port. If the local host is not known, a {@link RuntimeException}
-     * is thrown.
-     *
-     * @param port
-     *    the UDP port.
-     */
-    public UdpAddress(int port) {
-        try {
-            setInetAddress(InetAddress.getLocalHost());
-        } catch (UnknownHostException e) {
-           throw new RuntimeException(e);
-        }
-        setPort(port);
-    }
+  public UdpAddress(int port) {
+    setPort(port);
+  }
 
-    public UdpAddress(String address) {
-        if (!parseAddress(address)) {
-            throw new IllegalArgumentException(address);
-        }
+  public UdpAddress(String address) {
+    if (!parseAddress(address)) {
+      throw new IllegalArgumentException(address);
     }
+  }
 
-    public static Address parse(String address) {
-        UdpAddress a = new UdpAddress();
-        if (a.parseAddress(address)) {
-            return a;
-        }
-        return null;
+  public static Address parse(String address) {
+    UdpAddress a = new UdpAddress();
+    if (a.parseAddress(address)) {
+      return a;
     }
+    return null;
+  }
 
-    public boolean equals(Object o) {
-        return (o instanceof UdpAddress) && super.equals(o);
-    }
+  public boolean equals(Object o) {
+    return (o instanceof UdpAddress) && super.equals(o);
+  }
 
 }
 

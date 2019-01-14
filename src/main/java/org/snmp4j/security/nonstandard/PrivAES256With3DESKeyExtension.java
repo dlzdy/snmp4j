@@ -1,8 +1,8 @@
 /*_############################################################################
   _## 
-  _##  SNMP4J - PrivAES256With3DESKeyExtension.java  
+  _##  SNMP4J 2 - PrivAES256With3DESKeyExtension.java  
   _## 
-  _##  Copyright (C) 2003-2018  Frank Fock and Jochen Katz (SNMP4J.org)
+  _##  Copyright (C) 2003-2016  Frank Fock and Jochen Katz (SNMP4J.org)
   _##  
   _##  Licensed under the Apache License, Version 2.0 (the "License");
   _##  you may not use this file except in compliance with the License.
@@ -23,10 +23,10 @@ import org.snmp4j.mp.SnmpConstants;
 import org.snmp4j.smi.OID;
 
 /**
- * This class is provided for interoperability with some broken AES 256bit implementations of major network device
- * manufactures which use a key extension algorithm that was specified for {@link org.snmp4j.security.Priv3DES} but was
- * never specified for AES 192 and 256 bit.
- * <p>
+ * This class is provided for interoperability with some broken AES 256bit implementations of major
+ * network device manufactures which use a key extension algorithm that was specified for
+ * {@link org.snmp4j.security.Priv3DES} but was never specified for AES 192 and 256 bit.
+ *
  * Note: DO NOT USE THIS CLASS IF YOU WANT TO COMPLY WITH draft-blumenthal-aes-usm-04.txt!
  *
  * @author Frank Fock
@@ -35,22 +35,21 @@ import org.snmp4j.smi.OID;
  */
 public class PrivAES256With3DESKeyExtension extends PrivAESWith3DESKeyExtension implements NonStandardSecurityProtocol {
 
-    private static final long serialVersionUID = -3990967079221911116L;
-    /**
-     * Unique ID of this privacy protocol.
-     */
-    public static OID ID = new OID(SnmpConstants.oosnmpUsmAesCfb256ProtocolWith3DESKeyExtension);
+  /**
+   * Unique ID of this privacy protocol.
+   */
+  public static OID ID = new OID(SnmpConstants.oosnmpUsmAesCfb256ProtocolWith3DESKeyExtension);
 
-    /**
-     * Constructor.
-     */
-    public PrivAES256With3DESKeyExtension() {
-        super(32);
-    }
+  /**
+   * Constructor.
+   */
+  public PrivAES256With3DESKeyExtension() {
+    super(32);
+  }
 
 
-    @Override
-    public OID getDefaultID() {
-        return (OID) ID.clone();
-    }
+  @Override
+  public OID getDefaultID() {
+    return (OID)ID.clone();
+  }
 }

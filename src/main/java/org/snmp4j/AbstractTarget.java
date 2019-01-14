@@ -1,8 +1,8 @@
 /*_############################################################################
   _## 
-  _##  SNMP4J - AbstractTarget.java  
+  _##  SNMP4J 2 - AbstractTarget.java  
   _## 
-  _##  Copyright (C) 2003-2018  Frank Fock and Jochen Katz (SNMP4J.org)
+  _##  Copyright (C) 2003-2016  Frank Fock and Jochen Katz (SNMP4J.org)
   _##  
   _##  Licensed under the Apache License, Version 2.0 (the "License");
   _##  you may not use this file except in compliance with the License.
@@ -41,7 +41,6 @@ import java.util.List;
  */
 public abstract class AbstractTarget implements Target {
 
-  private static final long serialVersionUID = 7869222257083840513L;
   private Address address;
   private int version = SnmpConstants.version3;
   private int retries = 0;

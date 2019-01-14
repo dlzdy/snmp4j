@@ -1,8 +1,8 @@
 /*_############################################################################
   _## 
-  _##  SNMP4J - CommonTimer.java  
+  _##  SNMP4J 2 - CommonTimer.java  
   _## 
-  _##  Copyright (C) 2003-2018  Frank Fock and Jochen Katz (SNMP4J.org)
+  _##  Copyright (C) 2003-2016  Frank Fock and Jochen Katz (SNMP4J.org)
   _##  
   _##  Licensed under the Apache License, Version 2.0 (the "License");
   _##  you may not use this file except in compliance with the License.
@@ -37,8 +37,8 @@ public interface CommonTimer {
    *
    * @param task  task to be scheduled.
    * @param delay delay in milliseconds before task is to be executed.
-   * @throws IllegalArgumentException if <code>delay</code> is negative, or
-   *         <code>delay + System.currentTimeMillis()</code> is negative.
+   * @throws IllegalArgumentException if <tt>delay</tt> is negative, or
+   *         <tt>delay + System.currentTimeMillis()</tt> is negative.
    * @throws IllegalStateException if task was already scheduled or
    *         cancelled, or timer was cancelled.
    */
@@ -55,7 +55,7 @@ public interface CommonTimer {
    * background activity), subsequent executions will be delayed as well.
    * In the long run, the frequency of execution will generally be slightly
    * lower than the reciprocal of the specified period (assuming the system
-   * clock underlying <code>Object.wait(long)</code> is accurate).
+   * clock underlying <tt>Object.wait(long)</tt> is accurate).
    *
    * <p>Fixed-delay execution is appropriate for recurring activities
    * that require "smoothness."  In other words, it is appropriate for
@@ -69,7 +69,7 @@ public interface CommonTimer {
    * @param task   task to be scheduled.
    * @param firstTime First time at which task is to be executed.
    * @param period time in milliseconds between successive task executions.
-   * @throws IllegalArgumentException if <code>time.getTime()</code> is negative.
+   * @throws IllegalArgumentException if <tt>time.getTime()</tt> is negative.
    * @throws IllegalStateException if task was already scheduled or
    *         cancelled, timer was cancelled, or timer thread terminated.
    */
@@ -86,7 +86,7 @@ public interface CommonTimer {
    * background activity), subsequent executions will be delayed as well.
    * In the long run, the frequency of execution will generally be slightly
    * lower than the reciprocal of the specified period (assuming the system
-   * clock underlying <code>Object.wait(long)</code> is accurate).
+   * clock underlying <tt>Object.wait(long)</tt> is accurate).
    *
    * <p>Fixed-delay execution is appropriate for recurring activities
    * that require "smoothness."  In other words, it is appropriate for
@@ -100,8 +100,8 @@ public interface CommonTimer {
    * @param task   task to be scheduled.
    * @param delay  delay in milliseconds before task is to be executed.
    * @param period time in milliseconds between successive task executions.
-   * @throws IllegalArgumentException if <code>delay</code> is negative, or
-   *         <code>delay + System.currentTimeMillis()</code> is negative.
+   * @throws IllegalArgumentException if <tt>delay</tt> is negative, or
+   *         <tt>delay + System.currentTimeMillis()</tt> is negative.
    * @throws IllegalStateException if task was already scheduled or
    *         cancelled, timer was cancelled, or timer thread terminated.
    */

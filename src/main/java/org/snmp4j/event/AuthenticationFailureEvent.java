@@ -1,8 +1,8 @@
 /*_############################################################################
   _## 
-  _##  SNMP4J - AuthenticationFailureEvent.java  
+  _##  SNMP4J 2 - AuthenticationFailureEvent.java  
   _## 
-  _##  Copyright (C) 2003-2018  Frank Fock and Jochen Katz (SNMP4J.org)
+  _##  Copyright (C) 2003-2016  Frank Fock and Jochen Katz (SNMP4J.org)
   _##  
   _##  Licensed under the Apache License, Version 2.0 (the "License");
   _##  you may not use this file except in compliance with the License.
@@ -33,15 +33,15 @@ import org.snmp4j.transport.TransportListener;
  * the error.
  *
  * @author Frank Fock
- * @version 3.0.6
+ * @version 1.5
  * @since 1.5
  */
-public class AuthenticationFailureEvent<A extends Address> extends EventObject {
+public class AuthenticationFailureEvent extends EventObject {
 
   private static final long serialVersionUID = -8623553792794471405L;
 
-  private A address;
-  private transient TransportMapping<? super A> transport;
+  private Address address;
+  private transient TransportMapping transport;
   private BERInputStream message;
   private int error;
 
@@ -62,8 +62,8 @@ public class AuthenticationFailureEvent<A extends Address> extends EventObject {
    *    has stopped.
    */
   public AuthenticationFailureEvent(TransportListener source,
-                                    A sourceAddress,
-                                    TransportMapping<? super A> transport,
+                                    Address sourceAddress,
+                                    TransportMapping transport,
                                     int error,
                                     BERInputStream message) {
     super(source);
@@ -78,7 +78,7 @@ public class AuthenticationFailureEvent<A extends Address> extends EventObject {
    * @return
    *    a <code>TransportMapping</code> instance.
    */
-  public TransportMapping<? super A> getTransport() {
+  public TransportMapping getTransport() {
     return transport;
   }
 
@@ -106,7 +106,7 @@ public class AuthenticationFailureEvent<A extends Address> extends EventObject {
    * @return
    *    the source <code>Address</code>.
    */
-  public A getAddress() {
+  public Address getAddress() {
     return address;
   }
 

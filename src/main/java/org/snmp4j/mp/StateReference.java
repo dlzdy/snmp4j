@@ -1,8 +1,8 @@
 /*_############################################################################
   _## 
-  _##  SNMP4J - StateReference.java  
+  _##  SNMP4J 2 - StateReference.java  
   _## 
-  _##  Copyright (C) 2003-2018  Frank Fock and Jochen Katz (SNMP4J.org)
+  _##  Copyright (C) 2003-2016  Frank Fock and Jochen Katz (SNMP4J.org)
   _##  
   _##  Licensed under the Apache License, Version 2.0 (the "License");
   _##  you may not use this file except in compliance with the License.
@@ -40,7 +40,7 @@ public class StateReference implements Serializable {
   private static final long serialVersionUID = 7385215386971310699L;
 
   private Address address;
-  private transient TransportMapping<?> transportMapping;
+  private transient TransportMapping transportMapping;
   private byte[] contextEngineID;
   private byte[] contextName;
   private SecurityModel securityModel;
@@ -78,7 +78,7 @@ public class StateReference implements Serializable {
    */
   public StateReference(PduHandle pduHandle,
                         Address peerAddress,
-                        TransportMapping<?> peerTransport,
+                        TransportMapping peerTransport,
                         SecurityModel secModel,
                         byte[] secName,
                         int errorCode) {
@@ -111,7 +111,7 @@ public class StateReference implements Serializable {
                         int maxSizeResponseScopedPDU,
                         PduHandle pduHandle,
                         Address peerAddress,
-                        TransportMapping<?> peerTransport,
+                        TransportMapping peerTransport,
                         byte[] secEngineID,
                         SecurityModel secModel,
                         byte[] secName,
@@ -215,7 +215,7 @@ public class StateReference implements Serializable {
     return errorCode;
   }
 
-  public TransportMapping<?> getTransportMapping() {
+  public TransportMapping getTransportMapping() {
     return transportMapping;
   }
 
@@ -252,7 +252,7 @@ public class StateReference implements Serializable {
     this.errorCode = errorCode;
   }
 
-  public void setTransportMapping(TransportMapping<?> transportMapping) {
+  public void setTransportMapping(TransportMapping transportMapping) {
     this.transportMapping = transportMapping;
   }
 

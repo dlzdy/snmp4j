@@ -1,8 +1,8 @@
 /*_############################################################################
   _## 
-  _##  SNMP4J - TransportListener.java  
+  _##  SNMP4J 2 - TransportListener.java  
   _## 
-  _##  Copyright (C) 2003-2018  Frank Fock and Jochen Katz (SNMP4J.org)
+  _##  Copyright (C) 2003-2016  Frank Fock and Jochen Katz (SNMP4J.org)
   _##  
   _##  Licensed under the Apache License, Version 2.0 (the "License");
   _##  you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ import org.snmp4j.MessageDispatcher;
  * example {@link MessageDispatcher}.
  *
  * @author Frank Fock
- * @version 3.0.6
+ * @version 2.0
  * @since 1.6
  */
 public interface TransportListener {
@@ -54,7 +54,7 @@ public interface TransportListener {
    *    the transport model state reference as defined by RFC 5590.
    * @since 1.6
    */
-  void processMessage(TransportMapping<?> sourceTransport,
+  void processMessage(TransportMapping sourceTransport,
                       Address incomingAddress,
                       ByteBuffer wholeMessage,
                       TransportStateReference tmStateReference);

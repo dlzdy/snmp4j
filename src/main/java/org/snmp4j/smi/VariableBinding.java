@@ -1,8 +1,8 @@
 /*_############################################################################
   _## 
-  _##  SNMP4J - VariableBinding.java  
+  _##  SNMP4J 2 - VariableBinding.java  
   _## 
-  _##  Copyright (C) 2003-2018  Frank Fock and Jochen Katz (SNMP4J.org)
+  _##  Copyright (C) 2003-2016  Frank Fock and Jochen Katz (SNMP4J.org)
   _##  
   _##  Licensed under the Apache License, Version 2.0 (the "License");
   _##  you may not use this file except in compliance with the License.
@@ -81,8 +81,8 @@ public class VariableBinding
    * using the {@link VariableTextFormat} set by
    * {@link SNMP4JSettings#setVariableTextFormat(org.snmp4j.util.VariableTextFormat)}.
    * The default {@link org.snmp4j.util.SimpleVariableTextFormat} does not support
-   * this operation. To be able to use this constructor, register the <code>SmiManager</code>
-   * of SNMP4J-SMI instead as {@link VariableTextFormat} instead.
+   * this operation. To be able to use this constructor, use the <code>SmiManager</code>
+   * of SNMP4J-SMI instead.
    *
    * @param oid
    *    the {@link OID} of the new variable binding.

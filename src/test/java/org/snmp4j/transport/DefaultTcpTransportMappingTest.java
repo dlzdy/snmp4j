@@ -50,7 +50,7 @@ public class DefaultTcpTransportMappingTest extends TestCase {
         final Object sync = new Object();
         serverTransportMapping.addTransportListener(new TransportListener() {
             @Override
-            public void processMessage(TransportMapping<?> sourceTransport, Address incomingAddress,
+            public void processMessage(TransportMapping sourceTransport, Address incomingAddress,
                                        ByteBuffer wholeMessage, TransportStateReference tmStateReference) {
                 OctetString bytesReceived = new OctetString(wholeMessage.array());
                 System.out.println("Received from "+incomingAddress+": "+bytesReceived.toHexString());
@@ -74,7 +74,7 @@ public class DefaultTcpTransportMappingTest extends TestCase {
         v2cPDU.encodeBER(berOutputStream);
         byte[] bytes2Send = berOutputStream.getBuffer().array();
         synchronized (sync) {
-            clientTransportMapping.sendMessage(serverAddress, bytes2Send, transportStateReference, 1000, 0);
+            clientTransportMapping.sendMessage(serverAddress, bytes2Send, transportStateReference);
             sync.wait(2000);
         }
         assertEquals(1, bytesReceivedList.size());
@@ -90,7 +90,7 @@ public class DefaultTcpTransportMappingTest extends TestCase {
         final Object sync2 = new Object();
         serverTransportMapping.addTransportListener(new TransportListener() {
             @Override
-            public void processMessage(TransportMapping<?> sourceTransport, Address incomingAddress,
+            public void processMessage(TransportMapping sourceTransport, Address incomingAddress,
                                        ByteBuffer wholeMessage, TransportStateReference tmStateReference) {
                 OctetString bytesReceived = new OctetString(wholeMessage.array());
                 System.out.println("Received from "+incomingAddress+": "+bytesReceived.toHexString());
@@ -115,7 +115,7 @@ public class DefaultTcpTransportMappingTest extends TestCase {
         v2cPDU.encodeBER(berOutputStream);
         byte[] bytes2Send = berOutputStream.getBuffer().array();
         synchronized (sync) {
-            clientTransportMapping.sendMessage(serverAddress, bytes2Send, transportStateReference, 1000, 0);
+            clientTransportMapping.sendMessage(serverAddress, bytes2Send, transportStateReference);
             sync.wait(2000);
         }
         assertEquals(1, bytesReceivedList.size());
@@ -134,7 +134,7 @@ public class DefaultTcpTransportMappingTest extends TestCase {
                 new TransportStateReference(clientTransportMapping, null, null,
                         null, null, false, sync2);
         synchronized (sync2) {
-            clientTransportMapping.sendMessage(serverAddress, bytes2Send, transportStateReference, 1000, 0);
+            clientTransportMapping.sendMessage(serverAddress, bytes2Send, transportStateReference);
             sync2.wait(2000);
         }
         assertEquals(1, bytesReceivedList.size());

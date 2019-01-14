@@ -138,16 +138,4 @@ public class TestOID extends TestCase {
     assertEquals(a, b);
   }
 
-  public void testGetSuffix() {
-    OID a = new OID("1.3.6.2.1.5.'hallo'.1");
-    OID b = new OID("1.3.6.2.1.5");
-    OID c = new OID("1.3.6.2.1.1.5");
-    OID suffixA = a.getSuffix(b);
-    assertEquals(new OID("104.97.108.108.111.1"), suffixA);
-    OID zeroLength = a.getSuffix(a);
-    assertNotNull(zeroLength);
-    assertEquals(0, zeroLength.size());
-    OID nullOID = a.getSuffix(c);
-    assertNull(nullOID);
-  }
 }

@@ -1,8 +1,8 @@
 /*_############################################################################
   _## 
-  _##  SNMP4J - CertifiedTarget.java  
+  _##  SNMP4J 2 - CertifiedTarget.java  
   _## 
-  _##  Copyright (C) 2003-2018  Frank Fock and Jochen Katz (SNMP4J.org)
+  _##  Copyright (C) 2003-2016  Frank Fock and Jochen Katz (SNMP4J.org)
   _##  
   _##  Licensed under the Apache License, Version 2.0 (the "License");
   _##  you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@
 
 package org.snmp4j;
 
-import org.snmp4j.security.SecurityModel;
 import org.snmp4j.smi.Address;
 import org.snmp4j.smi.OctetString;
 import org.snmp4j.smi.TlsAddress;
@@ -33,7 +32,7 @@ import java.io.Serializable;
  * secured connections using client and server certificates.
  *
  * @author Frank Fock
- * @version 3.0
+ * @version 2.0
  * @since 2.0
  */
 public class CertifiedTarget extends SecureTarget implements CertifiedIdentity, Serializable {
@@ -45,7 +44,6 @@ public class CertifiedTarget extends SecureTarget implements CertifiedIdentity, 
 
   public CertifiedTarget(OctetString identity) {
     super(new TlsAddress(), identity);
-    setSecurityModel(SecurityModel.SECURITY_MODEL_TSM);
   }
 
   public CertifiedTarget(Address address, OctetString identity,
@@ -53,7 +51,6 @@ public class CertifiedTarget extends SecureTarget implements CertifiedIdentity, 
     super(address, identity);
     this.serverFingerprint = serverFingerprint;
     this.clientFingerprint = clientFingerprint;
-    setSecurityModel(SecurityModel.SECURITY_MODEL_TSM);
   }
 
   public OctetString getServerFingerprint() {

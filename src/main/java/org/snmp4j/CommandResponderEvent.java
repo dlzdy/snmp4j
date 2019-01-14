@@ -1,8 +1,8 @@
 /*_############################################################################
   _## 
-  _##  SNMP4J - CommandResponderEvent.java  
+  _##  SNMP4J 2 - CommandResponderEvent.java  
   _## 
-  _##  Copyright (C) 2003-2018  Frank Fock and Jochen Katz (SNMP4J.org)
+  _##  Copyright (C) 2003-2016  Frank Fock and Jochen Katz (SNMP4J.org)
   _##  
   _##  Licensed under the Apache License, Version 2.0 (the "License");
   _##  you may not use this file except in compliance with the License.
@@ -48,7 +48,7 @@ public class CommandResponderEvent extends EventObject {
   private byte[] securityName;
   private boolean processed;
   private Address peerAddress;
-  private transient TransportMapping<?> transportMapping;
+  private transient TransportMapping transportMapping;
   private TransportStateReference tmStateReference;
 
   /**
@@ -78,7 +78,7 @@ public class CommandResponderEvent extends EventObject {
    *    notifications.
    */
   public CommandResponderEvent(MessageDispatcher messageDispatcher,
-                               TransportMapping<?> transportMapping,
+                               TransportMapping transportMapping,
                                Address sourceAddress,
                                int messageProcessingModel,
                                int securityModel,
@@ -224,7 +224,7 @@ public class CommandResponderEvent extends EventObject {
    * @return
    *   a <code>TransportMapping</code> instance.
    */
-  public TransportMapping<?> getTransportMapping() {
+  public TransportMapping getTransportMapping() {
     return transportMapping;
   }
 
@@ -237,7 +237,7 @@ public class CommandResponderEvent extends EventObject {
     this.peerAddress = peerAddress;
   }
 
-  protected void setTransportMapping(TransportMapping<?> transportMapping) {
+  protected void setTransportMapping(TransportMapping transportMapping) {
     this.transportMapping = transportMapping;
   }
 

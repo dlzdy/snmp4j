@@ -1,8 +1,8 @@
 /*_############################################################################
   _## 
-  _##  SNMP4J - UsmUser.java  
+  _##  SNMP4J 2 - UsmUser.java  
   _## 
-  _##  Copyright (C) 2003-2018  Frank Fock and Jochen Katz (SNMP4J.org)
+  _##  Copyright (C) 2003-2016  Frank Fock and Jochen Katz (SNMP4J.org)
   _##  
   _##  Licensed under the Apache License, Version 2.0 (the "License");
   _##  you may not use this file except in compliance with the License.
@@ -34,9 +34,9 @@ import org.snmp4j.smi.OID;
  * inconsistent states in the USM, when a user is changed from outside.
  *
  * @author Frank Fock
- * @version 3.0.6
+ * @version 2.4.3
  */
-public class UsmUser implements User, Comparable<UsmUser>, Cloneable {
+public class UsmUser implements User, Comparable, Cloneable {
 
   private static final long serialVersionUID = -2258973598142206767L;
 
@@ -230,14 +230,15 @@ public class UsmUser implements User, Comparable<UsmUser>, Cloneable {
 
   /**
    * Compares two USM users by their security names.
-   * @param other
+   * @param o
    *    another <code>UsmUser</code> instance.
    * @return
    *    a negative integer, zero, or a positive integer as this object is
    *    less than, equal to, or greater than the specified object.
    */
-  public int compareTo(UsmUser other) {
+  public int compareTo(Object o) {
     // allow only comparison with UsmUsers
+    UsmUser other = (UsmUser)o;
     return securityName.compareTo(other.securityName);
   }
 

@@ -21,13 +21,16 @@
 
 package org.snmp4j.security;
 
+import org.apache.log4j.*;
 import junit.framework.*;
 import org.snmp4j.SNMP4JSettings;
 import org.snmp4j.smi.OID;
 import org.snmp4j.smi.OctetString;
 
 
-public class TestPrivAES extends TestCase {
+public class TestPrivAES
+    extends TestCase {
+  static Logger cat = Logger.getLogger(TestPrivAES.class);
   private SecurityProtocols secProts;
 
   public static String asHex(byte buf[]) {
@@ -48,6 +51,8 @@ public class TestPrivAES extends TestCase {
   }
 
   public static void testCrypt() {
+    BasicConfigurator.configure();
+
     PrivAES128 pd = new PrivAES128();
     DecryptParams pp = new DecryptParams();
     byte[] key = {
@@ -68,11 +73,16 @@ public class TestPrivAES extends TestCase {
     int engine_boots = 0xdeadc0de;
     int engine_time = 0xbeefdede;
 
+    cat.debug("Cleartext: " + asHex(plaintext));
     ciphertext = pd.encrypt(plaintext, 0, plaintext.length, key, engine_boots,
                             engine_time, pp);
+    cat.debug("Encrypted: " + asHex(ciphertext));
     decrypted = pd.decrypt(ciphertext, 0, ciphertext.length, key, engine_boots, engine_time, pp);
+    cat.debug("Cleartext: " + asHex(decrypted));
 
     assertEquals(asHex(plaintext), asHex(decrypted));
+
+    cat.info("pp length is: " + pp.length);
     assertEquals(8, pp.length);
   }
 

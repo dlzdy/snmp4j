@@ -1,8 +1,8 @@
 /*_############################################################################
   _## 
-  _##  SNMP4J - LogFactory.java  
+  _##  SNMP4J 2 - LogFactory.java  
   _## 
-  _##  Copyright (C) 2003-2018  Frank Fock and Jochen Katz (SNMP4J.org)
+  _##  Copyright (C) 2003-2016  Frank Fock and Jochen Katz (SNMP4J.org)
   _##  
   _##  Licensed under the Apache License, Version 2.0 (the "License");
   _##  you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@
   _##########################################################################*/
 package org.snmp4j.log;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 import java.util.Collections;
 
@@ -48,7 +47,7 @@ public class LogFactory {
    * @return
    *    the <code>LogAdapter</code> instance.
    */
-  public static LogAdapter getLogger(Class<?> c) {
+  public static LogAdapter getLogger(Class c) {
     checkConfig();
     if (snmp4jLogFactory == null) {
       return NoLogger.instance;
@@ -73,10 +72,15 @@ public class LogFactory {
       if (factory != null) {
         try {
           Class<? extends LogFactory> c = (Class<? extends LogFactory>)Class.forName(factory);
-          snmp4jLogFactory = c.getDeclaredConstructor().newInstance();
+          snmp4jLogFactory = c.newInstance();
         }
-        catch (NoSuchMethodException | InstantiationException | IllegalAccessException |
-                ClassNotFoundException | InvocationTargetException ex) {
+        catch (ClassNotFoundException ex) {
+          throw new RuntimeException(ex);
+        }
+        catch (IllegalAccessException ex) {
+          throw new RuntimeException(ex);
+        }
+        catch (InstantiationException ex) {
           throw new RuntimeException(ex);
         }
       }
@@ -126,7 +130,7 @@ public class LogFactory {
    * @return
    *    the <code>LogAdapter</code> instance.
    */
-  protected LogAdapter createLogger(Class<?> c) {
+  protected LogAdapter createLogger(Class c) {
     return NoLogger.instance;
   }
 
@@ -181,8 +185,8 @@ public class LogFactory {
    *    a read-only Iterator.
    * @since 1.7
    */
-  public Iterator<LogAdapter> loggers() {
-    return Collections.singletonList((LogAdapter)NoLogger.instance).iterator();
+  public Iterator loggers() {
+    return Collections.singletonList(NoLogger.instance).iterator();
   }
 
 }

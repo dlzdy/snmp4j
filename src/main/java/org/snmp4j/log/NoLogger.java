@@ -1,8 +1,8 @@
 /*_############################################################################
   _## 
-  _##  SNMP4J - NoLogger.java  
+  _##  SNMP4J 2 - NoLogger.java  
   _## 
-  _##  Copyright (C) 2003-2018  Frank Fock and Jochen Katz (SNMP4J.org)
+  _##  Copyright (C) 2003-2016  Frank Fock and Jochen Katz (SNMP4J.org)
   _##  
   _##  Licensed under the Apache License, Version 2.0 (the "License");
   _##  you may not use this file except in compliance with the License.
@@ -86,7 +86,7 @@ public class NoLogger implements LogAdapter {
     return LogLevel.OFF;
   }
 
-  public Iterator<?> getLogHandler() {
+  public Iterator getLogHandler() {
     return Collections.EMPTY_LIST.iterator();
   }
 

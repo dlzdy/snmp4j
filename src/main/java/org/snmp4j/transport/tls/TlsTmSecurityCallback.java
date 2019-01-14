@@ -1,8 +1,8 @@
 /*_############################################################################
   _## 
-  _##  SNMP4J - TlsTmSecurityCallback.java  
+  _##  SNMP4J 2 - TlsTmSecurityCallback.java  
   _## 
-  _##  Copyright (C) 2003-2018  Frank Fock and Jochen Katz (SNMP4J.org)
+  _##  Copyright (C) 2003-2016  Frank Fock and Jochen Katz (SNMP4J.org)
   _##  
   _##  Licensed under the Apache License, Version 2.0 (the "License");
   _##  you may not use this file except in compliance with the License.
@@ -29,7 +29,6 @@ import java.security.cert.Certificate;
  * The <code>TlsTmSecurityCallback</code> is implemented by the
  * SnmpTlsMib (of SNMP4J-Agent), for example, to resolve (lookup) the
  * <code>tmSecurityName</code> for incoming requests.
- * @param <C> The certificate type supported by this callback.
  *
  * @author Frank Fock
  * @version 2.0
@@ -54,7 +53,7 @@ public interface TlsTmSecurityCallback<C extends Certificate> {
    * @param peerEndCertificate
    *    a client Certificate instance to check acceptance for.
    * @return
-   *    <code>true</code> if the certificate is accepted.
+   *    <tt>true</tt> if the certificate is accepted.
    */
   boolean isClientCertificateAccepted(C peerEndCertificate);
 
@@ -63,7 +62,7 @@ public interface TlsTmSecurityCallback<C extends Certificate> {
    * @param peerCertificateChain
    *    a server Certificate chain to check acceptance for.
    * @return
-   *    <code>true</code> if the certificate chain is accepted.
+   *    <tt>true</tt> if the certificate chain is accepted.
    */
   boolean isServerCertificateAccepted(C[] peerCertificateChain);
 
@@ -72,7 +71,7 @@ public interface TlsTmSecurityCallback<C extends Certificate> {
    * @param issuerCertificate
    *    an issuer Certificate instance to check acceptance for.
    * @return
-   *    <code>true</code> if the certificate is accepted.
+   *    <tt>true</tt> if the certificate is accepted.
    */
   boolean isAcceptedIssuer(C issuerCertificate);
 
@@ -80,11 +79,11 @@ public interface TlsTmSecurityCallback<C extends Certificate> {
    * Gets the local certificate alias to be used for the supplied
    * target address.
    * @param targetAddress
-   *    a target address or <code>null</code> if the default local
+   *    a target address or <tt>null</tt> if the default local
    *    certificate alias needs to be retrieved.
    * @return
    *    the requested local certificate alias, if known.
-   *    Otherwise <code>null</code> is returned which could cause
+   *    Otherwise <tt>null</tt> is returned which could cause
    *    a protocol violation if the local key store contains more
    *    than one certificate.
    */

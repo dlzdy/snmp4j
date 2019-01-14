@@ -1,8 +1,8 @@
 /*_############################################################################
   _## 
-  _##  SNMP4J - JavaLogFactory.java  
+  _##  SNMP4J 2 - JavaLogFactory.java  
   _## 
-  _##  Copyright (C) 2003-2018  Frank Fock and Jochen Katz (SNMP4J.org)
+  _##  Copyright (C) 2003-2016  Frank Fock and Jochen Katz (SNMP4J.org)
   _##  
   _##  Licensed under the Apache License, Version 2.0 (the "License");
   _##  you may not use this file except in compliance with the License.
@@ -31,49 +31,49 @@ import java.util.*;
  * method has to be used before any SNMP4J class is referenced or instantiated.
  *
  * @author Frank Fock
- * @version 3.0.5
+ * @version 1.7.2
  */
 public class JavaLogFactory extends LogFactory {
 
-    public JavaLogFactory() {
+  public JavaLogFactory() {
+  }
+
+  protected LogAdapter createLogger(Class c) {
+    return new JavaLogAdapter(Logger.getLogger(c.getName()));
+  }
+
+  protected LogAdapter createLogger(String className) {
+    return new JavaLogAdapter(Logger.getLogger(className));
+  }
+
+  public LogAdapter getRootLogger() {
+    return new JavaLogAdapter(Logger.getLogger(""));
+  }
+
+  public Iterator loggers() {
+    Enumeration<String> loggerNames = LogManager.getLogManager().getLoggerNames();
+    return new JavaLogAdapterIterator(loggerNames);
+  }
+
+  public class JavaLogAdapterIterator implements Iterator {
+    private Enumeration<String> loggerNames;
+
+    protected JavaLogAdapterIterator(Enumeration<String> loggerNames) {
+      this.loggerNames = loggerNames;
     }
 
-    protected LogAdapter createLogger(Class<?> c) {
-        return new JavaLogAdapter(Logger.getLogger(c.getName()));
+    public void remove() {
+      throw new UnsupportedOperationException();
     }
 
-    protected LogAdapter createLogger(String className) {
-        return new JavaLogAdapter(Logger.getLogger(className));
+    public final boolean hasNext() {
+      return loggerNames.hasMoreElements();
     }
 
-    public LogAdapter getRootLogger() {
-        return new JavaLogAdapter(Logger.getLogger(""));
+    public Object next() {
+      String loggerName = loggerNames.nextElement();
+      Logger logger = Logger.getLogger(loggerName);
+      return new JavaLogAdapter(logger);
     }
-
-    public Iterator<LogAdapter> loggers() {
-        Enumeration<String> loggerNames = LogManager.getLogManager().getLoggerNames();
-        return new JavaLogAdapterIterator(loggerNames);
-    }
-
-    public class JavaLogAdapterIterator implements Iterator<LogAdapter> {
-        private Enumeration<String> loggerNames;
-
-        protected JavaLogAdapterIterator(Enumeration<String> loggerNames) {
-            this.loggerNames = loggerNames;
-        }
-
-        public void remove() {
-            throw new UnsupportedOperationException();
-        }
-
-        public final boolean hasNext() {
-            return loggerNames.hasMoreElements();
-        }
-
-        public LogAdapter next() {
-            String loggerName = loggerNames.nextElement();
-            Logger logger = Logger.getLogger(loggerName);
-            return new JavaLogAdapter(logger);
-        }
-    }
+  }
 }

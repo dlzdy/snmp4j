@@ -2,8 +2,13 @@
 CHANGE LOG OF SNMP4J
 ====================
 
-[2018-11-24] Version 3.0.6:
 
+[2018-11-24] Version 2.7.0:
+
+* Fixed [SFJ-182]: TLSTM does not send/receive SNMP messages longer than 16379 bytes.
+* Added: Support for trust stores for TLSTM (requires Java 7/8 or later).
+* Fixed: NullPointerException in Snmp.setLocalEngineID when no USM is added to this Snmp instance.
+* Changed: Required Java runtime raised to version 8 or later.
 * Fixed [SFJ-189]: Race condition in ThreadPool which could block task execution.
 * Fixed [SFJ-190]: DefaultUdpTransportMapping throws exception and blocks ListenThread shutdown on
   incoming packet after shutdown.
@@ -11,67 +16,6 @@ CHANGE LOG OF SNMP4J
   (i.e. SSLEngine BUFFER_UNDERFLOW not handled correctly)
 * Fixed [SFJ-192]: TLSTM is not able to parse fragmented TLS packets if two or more fragments are received
   in one TCP packet.
-* Improved: Removed generics warnings and added missing serializeVersionUIDs.
-
-[2018-10-23] Version 3.0.5:
-
-* Fixed [SFJ-186]: Regression: TLS message sending is broken in version 3.0.0 to 3.0.4.
-* Fixed [SFJ-182]: TLSTM does not send/receive SNMP messages longer than 16379 bytes.
-* Improved [SFJ-184]: Add support for more than one address class per TransportMapping by new method
-  getSupportedAddressClasses(). MessageDispatcherImpl now maps those transport mappings with more than one
-  supported address class too. Which transport mapping is used, depends on the time of the registration at the
-  MessageDispatcher. Earlier registered mappings take precedence.
-
-[2018-10-15] Version 3.0.4:
-
-* Fixed [SFJ-180]: Possible NullPointerExceptions in TLSTM connect (socketCleaner) and close.
-
-[2018-10-15] Version 3.0.3:
-
-* Fixed [SFJ-183]: DTLS command responder is not able to return SNMPv3 (payload) response PDU because
-  the destination address from the command generator is not correctly matched with the established DTLS session
-  as required by RFC 6353 section 5.1.1.
-* Improved: DTLS/TLS debug logging.
-
-[2018-10-10] Version 3.0.2:
-
-* Fixed: Argument parser throws error when parsing a command format with selectCommand that has no
-  parameters.
-* Fixed: JavaDoc 9 html5 format errors caused by usage of <tt> instead of <code>.
-* Fixed [SFJ-177]: Method "Iterable LogFactory.loggers()" changed to more specific "Iterable<LogAdapter> loggers()".
-
-[2018-09-24] Version 3.0.1:
-
-* Fixed: Possible "NoSuchElementException" in TableUtils while retrieving rows in dense table mode.
-* Fixed: JavaDoc style.
-
-[2018-09-17] Version 3.0.0:
-
-* Added [SFJ-114]:Implemented DTLS support according to RFC 6353 by DTLSTM.
-* Added [SFJ-175]: Support for Java 9 modules.
-* Improved [SFJ-88]: Replaced Vector return Value in PDU.getVariableBindings() with List and removed Vector from
-  other inner usages, i.e. by listener lists.
-* Fixed [SFJ-132]: TableUtils is caught in a notify when agent does not return VBs in lexicographic order.
-* Fixed [SFJ-133]: DefaultUdpTransportMapping getListenAddress() does not return the local IP address.
-* Fixed [SFJ-134]: DefaultUdpTransportMapping listen() fails to run if socket timeout is non-zero.
-* Fixed [SFJ-169]: Removed log4j dependency because Log4j is no further maintained.
-* Added: New TableUtils retrieval operation modes to better support dense table operations.
-* Improved: Optimized wait time for sync responses.
-* Changed: SNMP4J 3.x depends on Java 9 (or later).
-* Improved: Optimised OID BER decoding and made some OID helper methods public.
-* Added: Added OID.toUnsignedLongArray().
-* Added: Added OID.getSuffix method. Improved logging for USM.
-* Improved: Removed SHA and MD5 from default protocols and fixed unit tests accordingly.
-* Improved: 3DES test prints warning when protocol is not supported by JRE instead bailing out.
-* Changed: Changed removePrivacyProtocol method signature to use OID instead protocol object.
-* Improved: SecurityProtocols now ignore custom mapping with zero size custom OID.
-* Changed: Moved setLocalEngineID and getLocalEngineID methods from Snmp to Session.
-* Improved: ConsoleLogAdapter now optionally (but by default) prints out time and always log level.
-* Changed: SnmpRequest class by a completely new implementation 'SnmpCommand' using the SnmpConfigurator class.
-  The new implementation provides better help and command syntax as well as support for TLS and DTLS.
-  Its syntax and command support is similar to SNMP4J-CLT which provides MIB, USM user management,
-  and Diffie Hellman operations in addition.
-* Changed: Removed SSH related transport mapping classes.
 
 [2018-04-18] Version 2.6.3:
 

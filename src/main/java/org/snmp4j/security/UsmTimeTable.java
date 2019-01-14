@@ -1,8 +1,8 @@
 /*_############################################################################
   _## 
-  _##  SNMP4J - UsmTimeTable.java  
+  _##  SNMP4J 2 - UsmTimeTable.java  
   _## 
-  _##  Copyright (C) 2003-2018  Frank Fock and Jochen Katz (SNMP4J.org)
+  _##  Copyright (C) 2003-2016  Frank Fock and Jochen Katz (SNMP4J.org)
   _##  
   _##  Licensed under the Apache License, Version 2.0 (the "License");
   _##  you may not use this file except in compliance with the License.
@@ -40,7 +40,6 @@ public class UsmTimeTable implements Serializable {
   private static final LogAdapter logger = LogFactory.getLogger(UsmTimeTable.class);
 
   static final long TIME_PRECISION = 1000000000L;
-  public static final int USM_MAX_TIME_DIFFERENCE_HUNDREDS = 150;
 
   private Hashtable<Variable, UsmTimeEntry> table = new Hashtable<Variable, UsmTimeEntry>(10);
   private long lastLocalTimeChange = System.nanoTime();
@@ -152,7 +151,7 @@ public class UsmTimeTable implements Serializable {
       if ((localTime.getEngineBoots() == 2147483647) ||
           (localTime.getEngineBoots() != entry.getEngineBoots()) ||
           (Math.abs(now + localTime.getTimeDiff() - entry.getLatestReceivedTime())
-           > USM_MAX_TIME_DIFFERENCE_HUNDREDS)) {
+           > 150)) {
         if (logger.isDebugEnabled()) {
           logger.debug(
               "CheckTime: received message outside time window (authoritative):"+

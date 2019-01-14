@@ -1,8 +1,8 @@
 /*_############################################################################
   _## 
-  _##  SNMP4J - AuthGeneric.java  
+  _##  SNMP4J 2 - AuthGeneric.java  
   _## 
-  _##  Copyright (C) 2003-2018  Frank Fock and Jochen Katz (SNMP4J.org)
+  _##  Copyright (C) 2003-2016  Frank Fock and Jochen Katz (SNMP4J.org)
   _##  
   _##  Licensed under the Apache License, Version 2.0 (the "License");
   _##  you may not use this file except in compliance with the License.
@@ -36,7 +36,6 @@ import org.snmp4j.smi.OctetString;
 public abstract class AuthGeneric implements AuthenticationProtocol {
 
   private static final LogAdapter logger = LogFactory.getLogger(AuthGeneric.class);
-  private static final long serialVersionUID = 4035708925348178888L;
 
   public static int HMAC_BLOCK_SIZE = 64;
   private static int DEFAULT_AUTHENTICATION_CODE_LENGTH = 12;

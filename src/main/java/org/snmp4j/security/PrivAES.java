@@ -1,8 +1,8 @@
 /*_############################################################################
   _## 
-  _##  SNMP4J - PrivAES.java  
+  _##  SNMP4J 2 - PrivAES.java  
   _## 
-  _##  Copyright (C) 2003-2018  Frank Fock and Jochen Katz (SNMP4J.org)
+  _##  Copyright (C) 2003-2016  Frank Fock and Jochen Katz (SNMP4J.org)
   _##  
   _##  Licensed under the Apache License, Version 2.0 (the "License");
   _##  you may not use this file except in compliance with the License.
@@ -50,7 +50,6 @@ public abstract class PrivAES extends PrivacyGeneric
   private static final int INIT_VECTOR_LENGTH = 16;
 
   private static final LogAdapter logger = LogFactory.getLogger(PrivAES.class);
-  private static final long serialVersionUID = 2798468538964694029L;
   protected Salt salt;
 
   /**

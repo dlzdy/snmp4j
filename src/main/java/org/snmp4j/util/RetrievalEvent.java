@@ -1,8 +1,8 @@
 /*_############################################################################
   _## 
-  _##  SNMP4J - RetrievalEvent.java  
+  _##  SNMP4J 2 - RetrievalEvent.java  
   _## 
-  _##  Copyright (C) 2003-2018  Frank Fock and Jochen Katz (SNMP4J.org)
+  _##  Copyright (C) 2003-2016  Frank Fock and Jochen Katz (SNMP4J.org)
   _##  
   _##  Licensed under the Apache License, Version 2.0 (the "License");
   _##  you may not use this file except in compliance with the License.
@@ -60,7 +60,6 @@ public abstract class RetrievalEvent extends EventObject {
    * @see #getException()
    */
   public static final int STATUS_EXCEPTION = -4;
-  private static final long serialVersionUID = 6592701899052543606L;
 
   protected VariableBinding[] vbs;
   protected int status = STATUS_OK;

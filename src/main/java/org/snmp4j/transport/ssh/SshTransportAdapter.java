@@ -1,8 +1,8 @@
 /*_############################################################################
   _## 
-  _##  SNMP4J - module-info.java  
+  _##  SNMP4J 2 - SshTransportAdapter.java  
   _## 
-  _##  Copyright (C) 2003-2018  Frank Fock and Jochen Katz (SNMP4J.org)
+  _##  Copyright (C) 2003-2016  Frank Fock and Jochen Katz (SNMP4J.org)
   _##  
   _##  Licensed under the Apache License, Version 2.0 (the "License");
   _##  you may not use this file except in compliance with the License.
@@ -17,20 +17,24 @@
   _##  limitations under the License.
   _##  
   _##########################################################################*/
-module org.snmp4j {
-    requires transitive java.logging;
-    exports org.snmp4j;
-    exports org.snmp4j.asn1;
-    exports org.snmp4j.event;
-    exports org.snmp4j.log;
-    exports org.snmp4j.mp;
-    exports org.snmp4j.security;
-    exports org.snmp4j.security.dh;
-    exports org.snmp4j.security.nonstandard;
-    exports org.snmp4j.smi;
-    exports org.snmp4j.transport.tls;
-    exports org.snmp4j.transport;
-    exports org.snmp4j.uri;
-    exports org.snmp4j.util;
-    exports org.snmp4j.version;
+
+package org.snmp4j.transport.ssh;
+
+import org.snmp4j.TransportStateReference;
+import org.snmp4j.transport.ssh.SshSession;
+
+/**
+ * The <code>SshTransportAdapter</code> adapts 3rd party SSH transport protocol
+ * implementations for SNMP4J.
+ * @author Frank Fock
+ * @version 2.0
+ * @since 2.0
+ */
+public interface SshTransportAdapter<I> {
+
+  SshSession<I> openClientSession(TransportStateReference tmStateReference, int maxMessageSize);
+  SshSession<I> openServerSession(TransportStateReference tmStateReference, int maxMessageSize);
+
+  boolean closeSession(Long sessionID);
+
 }

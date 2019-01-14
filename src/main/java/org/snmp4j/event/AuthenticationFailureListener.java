@@ -1,8 +1,8 @@
 /*_############################################################################
   _## 
-  _##  SNMP4J - AuthenticationFailureListener.java  
+  _##  SNMP4J 2 - AuthenticationFailureListener.java  
   _## 
-  _##  Copyright (C) 2003-2018  Frank Fock and Jochen Katz (SNMP4J.org)
+  _##  Copyright (C) 2003-2016  Frank Fock and Jochen Katz (SNMP4J.org)
   _##  
   _##  Licensed under the Apache License, Version 2.0 (the "License");
   _##  you may not use this file except in compliance with the License.
@@ -19,26 +19,25 @@
   _##########################################################################*/
 package org.snmp4j.event;
 
-import org.snmp4j.smi.Address;
-
 import java.util.EventListener;
 
 /**
- * The <code>AuthenticationFailureListener</code> listens for authentication failure events.
+ * The <code>AuthenticationFailureListener</code> listens for authentication
+ * failure events.
  *
  * @author Frank Fock
- * @version 3.0.6
+ * @version 1.5
  * @since 1.5
  */
 public interface AuthenticationFailureListener extends EventListener {
 
-    /**
-     * Informs about an authentication failure occurred while processing the message contained in the supplied event
-     * object.
-     *
-     * @param event
-     *         a <code>AuthenticationFailureEvent</code> describing the type of authentication failure, the offending
-     *         message, and its source address and transport protocol.
-     */
-    void authenticationFailure(AuthenticationFailureEvent<? super Address> event);
+  /**
+   * Informs about an authentication failure occurred while processing the
+   * message contained in the supplied event object.
+   * @param event
+   *    a <code>AuthenticationFailureEvent</code> describing the type of
+   *    authentication failure, the offending message, and its source address
+   *    and transport protocol.
+   */
+  void authenticationFailure(AuthenticationFailureEvent event);
 }

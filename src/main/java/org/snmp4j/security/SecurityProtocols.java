@@ -1,8 +1,8 @@
 /*_############################################################################
   _## 
-  _##  SNMP4J - SecurityProtocols.java  
+  _##  SNMP4J 2 - SecurityProtocols.java  
   _## 
-  _##  Copyright (C) 2003-2018  Frank Fock and Jochen Katz (SNMP4J.org)
+  _##  Copyright (C) 2003-2016  Frank Fock and Jochen Katz (SNMP4J.org)
   _##  
   _##  Licensed under the Apache License, Version 2.0 (the "License");
   _##  you may not use this file except in compliance with the License.
@@ -24,7 +24,6 @@ import java.io.Serializable;
 import org.snmp4j.security.nonstandard.NonStandardSecurityProtocol;
 import org.snmp4j.smi.OID;
 import java.io.InputStream;
-import java.util.Iterator;
 import java.util.Properties;
 import java.util.Enumeration;
 import org.snmp4j.log.*;
@@ -114,10 +113,9 @@ public class SecurityProtocols implements Serializable {
    * @return
    *    this SecurityProtocols instance for chaining configuration.
    *
-   * @throws InternalError if {@link SNMP4JSettings#isExtensibilityEnabled()} is {@code true}
+   * @throws InternalError if {@link SNMP4JSettings#isExtensibilityEnabled()} is <code>true</code>
    * and corresponding properties file with the security protocols configuration cannot be opened/read.
    */
-  @SuppressWarnings("unchecked")
   public synchronized SecurityProtocols addDefaultProtocols() {
     if (SNMP4JSettings.isExtensibilityEnabled()) {
       String secProtocols =
@@ -132,16 +130,16 @@ public class SecurityProtocols implements Serializable {
       Properties props = new Properties();
       try {
         props.load(is);
-        for (Iterator<String> en = props.stringPropertyNames().iterator(); en.hasNext(); ) {
-          String className = en.next();
+        for (Enumeration en = props.propertyNames(); en.hasMoreElements(); ) {
+          String className = en.nextElement().toString();
           String customOidString = props.getProperty(className);
           OID customOID = null;
           if (customOidString != null) {
             customOID = new OID(customOidString);
           }
           try {
-            Class<? extends SecurityProtocol> c = (Class<? extends SecurityProtocol>)Class.forName(className);
-            Object proto = c.getDeclaredConstructor().newInstance();
+            Class c = Class.forName(className);
+            Object proto = c.newInstance();
             if ((proto instanceof NonStandardSecurityProtocol) && (customOID != null) && (customOID.size() > 0)) {
               if (logger.isInfoEnabled()) {
                 logger.info("Assigning custom ID '" + customOID + "' to security protocol " + className);
@@ -183,8 +181,8 @@ public class SecurityProtocols implements Serializable {
       }
     }
     else {
-// Unsecure:      addAuthenticationProtocol(new AuthMD5());
-// Unsecure:      addAuthenticationProtocol(new AuthSHA());
+      addAuthenticationProtocol(new AuthMD5());
+      addAuthenticationProtocol(new AuthSHA());
       addAuthenticationProtocol(new AuthHMAC128SHA224());
       addAuthenticationProtocol(new AuthHMAC192SHA256());
       addAuthenticationProtocol(new AuthHMAC256SHA384());
@@ -204,7 +202,7 @@ public class SecurityProtocols implements Serializable {
    *
    * @param auth
    *    the AuthenticationProtocol to add (an existing authentication protcol
-   *    with {@code auth}'s ID remains unchanged).
+   *    with <code>auth</code>'s ID remains unchanged).
    */
   public synchronized void addAuthenticationProtocol(AuthenticationProtocol auth) {
     if (authProtocols.get(auth.getID()) == null) {
@@ -234,10 +232,10 @@ public class SecurityProtocols implements Serializable {
   /**
    * Remove the given {@link AuthenticationProtocol}.
    *
-   * @param authOID The object identifier of the protocol to remove
+   * @param auth The protocol to remove
    */
-  public void removeAuthenticationProtocol(OID authOID) {
-    authProtocols.remove(authOID);
+  public void removeAuthenticationProtocol(AuthenticationProtocol auth) {
+    authProtocols.remove(auth.getID());
   }
 
   /**
@@ -246,8 +244,8 @@ public class SecurityProtocols implements Serializable {
    * will not be added and the security protocols will not be changed.
    *
    * @param priv
-   *    the PrivacyProtocol to add (an existing privacy protocol
-   *    with {@code priv}'s ID remains unchanged).
+   *    the PrivacyProtocol to add (an existing privacy protcol
+   *    with <code>priv</code>'s ID remains unchanged).
    */
   public synchronized void addPrivacyProtocol(PrivacyProtocol priv) {
     if (privProtocols.get(priv.getID()) == null) {
@@ -277,10 +275,10 @@ public class SecurityProtocols implements Serializable {
   /**
    * Remove the given {@link PrivacyProtocol}.
    *
-   * @param privOID The object identifier of the protocol to remove
+   * @param priv The protocol to remove
    */
-  public void removePrivacyProtocol(OID privOID) {
-    privProtocols.remove(privOID);
+  public void removePrivacyProtocol(PrivacyProtocol priv) {
+    privProtocols.remove(priv.getID());
   }
 
 

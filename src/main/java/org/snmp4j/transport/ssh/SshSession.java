@@ -1,8 +1,8 @@
 /*_############################################################################
   _## 
-  _##  SNMP4J - X509TlsTransportMappingConfig.java  
+  _##  SNMP4J 2 - SshSession.java  
   _## 
-  _##  Copyright (C) 2003-2018  Frank Fock and Jochen Katz (SNMP4J.org)
+  _##  Copyright (C) 2003-2016  Frank Fock and Jochen Katz (SNMP4J.org)
   _##  
   _##  Licensed under the Apache License, Version 2.0 (the "License");
   _##  you may not use this file except in compliance with the License.
@@ -18,17 +18,29 @@
   _##  
   _##########################################################################*/
 
-package org.snmp4j.transport.tls;
+package org.snmp4j.transport.ssh;
 
-import java.security.cert.X509Certificate;
+import org.snmp4j.TransportStateReference;
+import org.snmp4j.transport.TransportListener;
 
 /**
- * The {@code TlsTransportMappingConfig} interface provides means to plug in a {@link TlsTmSecurityCallback} into
- * a {@link org.snmp4j.TransportMapping} that uses {@link X509Certificate}s for TLS.
+ * The <code>SshSession</code> interface provides access to a SSH session
+ * provided by a {@link SshTransportAdapter}.
  *
  * @author Frank Fock
- * @since 3.0
+ * @version 2.0
+ * @since 2.0
  */
+public interface SshSession<I> {
 
-public interface X509TlsTransportMappingConfig extends TlsTransportMappingConfig<X509Certificate> {
+  Long getID();
+
+  TransportStateReference getTransportStateReference();
+
+  void setTransportStateReference(TransportStateReference tmStateReference);
+
+  I getImplementation();
+
+  void addTransportListener(TransportListener transportListener);
+  void removeTransportListener(TransportListener transportListener);
 }

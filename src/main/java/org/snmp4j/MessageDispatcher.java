@@ -1,8 +1,8 @@
 /*_############################################################################
   _## 
-  _##  SNMP4J - MessageDispatcher.java  
+  _##  SNMP4J 2 - MessageDispatcher.java  
   _## 
-  _##  Copyright (C) 2003-2018  Frank Fock and Jochen Katz (SNMP4J.org)
+  _##  Copyright (C) 2003-2016  Frank Fock and Jochen Katz (SNMP4J.org)
   _##  
   _##  Licensed under the Apache License, Version 2.0 (the "License");
   _##  you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@
   _##########################################################################*/
 package org.snmp4j;
 
-import org.snmp4j.event.CounterListener;
 import org.snmp4j.smi.Address;
 import org.snmp4j.mp.*;
 import java.util.Collection;
@@ -36,7 +35,7 @@ import java.nio.ByteBuffer;
  * process any messages.
  *
  * @author Frank Fock
- * @version 3.0
+ * @version 2.0
  */
 public interface MessageDispatcher extends TransportListener {
 
@@ -95,31 +94,10 @@ public interface MessageDispatcher extends TransportListener {
    * @param transport
    *    a {@code TransportMapping} instance.
    * @return
-   *    the {@code TransportMapping} instance if it
-   *    could be successfully removed, {@code null} otherwise.
+   *    the {@code TransportMapping} instance supplied if it
+   * could be successfully removed, {@code null} otherwise.
    */
-  TransportMapping<? extends Address> removeTransportMapping(TransportMapping<? extends Address> transport);
-
-  /**
-   * Adds a {@link CounterListener} to the dispatcher. The counter listener
-   * is informed about errors during message dispatching.
-   * @param counterListener
-   *   a {@code CounterListener} instance.
-   * @since 3.0
-   */
-  void addCounterListener(CounterListener counterListener);
-
-  /**
-   * Removes a previously added {@link CounterListener} from the dispatcher.
-   * @param counterListener
-   *    a {@code CounterListener} instance.
-   * @return
-   *    the {@code CounterListener} instance if it
-   *    could be successfully removed, {@code null} otherwise.
-   * @since 3.0
-   */
-  CounterListener removeCounterListener(CounterListener counterListener);
-
+  TransportMapping removeTransportMapping(TransportMapping<? extends Address> transport);
 
   /**
    * Gets the {@code Collection} of transport mappings in this message
@@ -127,7 +105,7 @@ public interface MessageDispatcher extends TransportListener {
    * @return
    *    a Collection with the registered transport mappings.
    */
-  Collection<TransportMapping<? extends Address>> getTransportMappings();
+  Collection<TransportMapping> getTransportMappings();
 
   /**
    * Returns a transport mapping that can handle the supplied address.
@@ -139,7 +117,7 @@ public interface MessageDispatcher extends TransportListener {
    *    such a transport mapping does not exists.
    * @since 1.6
    */
-  TransportMapping<? extends Address> getTransport(Address destAddress);
+  TransportMapping getTransport(Address destAddress);
 
   /**
    * Adds a {@link CommandResponder} instance to the message dispatcher.
@@ -180,7 +158,7 @@ public interface MessageDispatcher extends TransportListener {
    * @throws MessageException
    *    if sending of the PDU failed.
    */
-  PduHandle sendPdu(TransportMapping<?> transportMapping,
+  PduHandle sendPdu(TransportMapping transportMapping,
                     Target target,
                     /* the following parameters are given in ScopedPDU
                        byte[] contextEngineID,
@@ -219,7 +197,7 @@ public interface MessageDispatcher extends TransportListener {
    * @throws MessageException
    *    if sending of the PDU failed.
    */
-  PduHandle sendPdu(TransportMapping<?> transportMapping,
+  PduHandle sendPdu(TransportMapping transportMapping,
                     Target target,
                     /* the following parameters are given in ScopedPDU
                        byte[] contextEngineID,
@@ -303,7 +281,7 @@ public interface MessageDispatcher extends TransportListener {
    * @param tmStateReference
    *    the transport model state reference as defined by RFC 5590.
    */
-  void processMessage(TransportMapping<?> sourceTransport,
+  void processMessage(TransportMapping sourceTransport,
                       Address incomingAddress,
                       ByteBuffer wholeMessage,
                       TransportStateReference tmStateReference);

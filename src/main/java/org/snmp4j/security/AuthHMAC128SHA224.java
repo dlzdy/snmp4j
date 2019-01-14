@@ -1,8 +1,8 @@
 /*_############################################################################
   _## 
-  _##  SNMP4J - AuthHMAC128SHA224.java  
+  _##  SNMP4J 2 - AuthHMAC128SHA224.java  
   _## 
-  _##  Copyright (C) 2003-2018  Frank Fock and Jochen Katz (SNMP4J.org)
+  _##  Copyright (C) 2003-2016  Frank Fock and Jochen Katz (SNMP4J.org)
   _##  
   _##  Licensed under the Apache License, Version 2.0 (the "License");
   _##  you may not use this file except in compliance with the License.
@@ -22,25 +22,25 @@ package org.snmp4j.security;
 import org.snmp4j.smi.OID;
 
 /**
- * The class {@code AuthHMAC128SHA224} implements the usmHMAC128SHA224AuthProtocol defined by RFC 7630.
+ * The class <code>AuthHMAC128SHA224</code> implements the usmHMAC128SHA224AuthProtocol
+ * defined by RFC 7630.
  *
  * @author Frank Fock
  * @since 2.4.0
  */
 public class AuthHMAC128SHA224 extends AuthSHA2 {
 
-    public static final OID ID = new OID(new int[]{1, 3, 6, 1, 6, 3, 10, 1, 1, 4});
-    private static final int DIGEST_LENGTH = 28;
-    private static final int AUTH_CODE_LENGTH = 16;
-    private static final int HMAC_BLOCK_SIZE = AuthGeneric.HMAC_BLOCK_SIZE;
-    private static final long serialVersionUID = 4503289090212997494L;
+  public static final OID ID = new OID(new int[] { 1,3,6,1,6,3,10,1,1,4 });
+  private static final int DIGEST_LENGTH = 28;
+  private static final int AUTH_CODE_LENGTH = 16;
+  private static final int HMAC_BLOCK_SIZE = AuthGeneric.HMAC_BLOCK_SIZE;
 
-    /**
-     * Creates an usmHMAC128SHA224AuthProtocol implementation.
-     */
-    public AuthHMAC128SHA224() {
-        super("SHA-224", ID,
-                DIGEST_LENGTH, AUTH_CODE_LENGTH, HMAC_BLOCK_SIZE);
-    }
+  /**
+   * Creates an usmHMAC128SHA224AuthProtocol implementation.
+   */
+  public AuthHMAC128SHA224() {
+    super("SHA-224", ID,
+            DIGEST_LENGTH, AUTH_CODE_LENGTH, HMAC_BLOCK_SIZE);
+  }
 
 }

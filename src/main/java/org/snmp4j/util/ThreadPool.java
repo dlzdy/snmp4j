@@ -291,10 +291,10 @@ public class ThreadPool implements WorkerPool {
      * The <code>TaskManager</code> executes tasks in a thread.
      *
      * @author Frank Fock
-     * @version 3.0.6
+     * @version 2.7.0
      * @since 1.0.2
      */
-    protected class TaskManager extends Thread {
+    class TaskManager extends Thread {
 
         private WorkerTask task = null;
         private volatile boolean run = true;

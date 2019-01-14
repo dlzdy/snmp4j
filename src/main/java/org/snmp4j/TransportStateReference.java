@@ -1,8 +1,8 @@
 /*_############################################################################
   _## 
-  _##  SNMP4J - TransportStateReference.java  
+  _##  SNMP4J 2 - TransportStateReference.java  
   _## 
-  _##  Copyright (C) 2003-2018  Frank Fock and Jochen Katz (SNMP4J.org)
+  _##  Copyright (C) 2003-2016  Frank Fock and Jochen Katz (SNMP4J.org)
   _##  
   _##  Licensed under the Apache License, Version 2.0 (the "License");
   _##  you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@ import org.snmp4j.smi.OctetString;
  */
 public class TransportStateReference {
 
-  private TransportMapping<?> transport;
+  private TransportMapping transport;
   private Address address;
   private OctetString securityName;
   private SecurityLevel requestedSecurityLevel;
@@ -44,7 +44,7 @@ public class TransportStateReference {
   private Object sessionID;
   private CertifiedIdentity certifiedIdentity;
 
-  public TransportStateReference(TransportMapping<?> transport,
+  public TransportStateReference(TransportMapping transport,
                                  Address address,
                                  OctetString securityName,
                                  SecurityLevel requestedSecurityLevel,
@@ -60,7 +60,7 @@ public class TransportStateReference {
     this.sessionID = sessionID;
   }
 
-  public TransportStateReference(TransportMapping<?> transport,
+  public TransportStateReference(TransportMapping transport,
                                  Address address,
                                  OctetString securityName,
                                  SecurityLevel requestedSecurityLevel,
@@ -73,11 +73,7 @@ public class TransportStateReference {
     this.certifiedIdentity = certifiedIdentity;
   }
 
-  public void setTransport(TransportMapping<?> transport) {
-    this.transport = transport;
-  }
-
-  public TransportMapping<?> getTransport() {
+  public TransportMapping getTransport() {
     return transport;
   }
 

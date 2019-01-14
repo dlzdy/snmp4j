@@ -1,8 +1,8 @@
 /*_############################################################################
   _## 
-  _##  SNMP4J - EnumerationIterator.java  
+  _##  SNMP4J 2 - EnumerationIterator.java  
   _## 
-  _##  Copyright (C) 2003-2018  Frank Fock and Jochen Katz (SNMP4J.org)
+  _##  Copyright (C) 2003-2016  Frank Fock and Jochen Katz (SNMP4J.org)
   _##  
   _##  Licensed under the Apache License, Version 2.0 (the "License");
   _##  you may not use this file except in compliance with the License.
@@ -38,9 +38,9 @@ public class EnumerationIterator<E> implements Iterator<E> {
   }
 
   /**
-   * Returns <code>true</code> if the iteration has more elements.
+   * Returns <tt>true</tt> if the iteration has more elements.
    *
-   * @return <code>true</code> if the iterator has more elements.
+   * @return <tt>true</tt> if the iterator has more elements.
    */
   public boolean hasNext() {
     return e.hasMoreElements();

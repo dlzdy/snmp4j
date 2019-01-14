@@ -1,8 +1,8 @@
 /*_############################################################################
   _## 
-  _##  SNMP4J - TsmSecurityParameters.java  
+  _##  SNMP4J 2 - TsmSecurityParameters.java  
   _## 
-  _##  Copyright (C) 2003-2018  Frank Fock and Jochen Katz (SNMP4J.org)
+  _##  Copyright (C) 2003-2016  Frank Fock and Jochen Katz (SNMP4J.org)
   _##  
   _##  Licensed under the Apache License, Version 2.0 (the "License");
   _##  you may not use this file except in compliance with the License.
@@ -26,55 +26,56 @@ import org.snmp4j.smi.OctetString;
 import java.io.IOException;
 
 /**
- * {@link SecurityParameters} implementation for the {@link TSM} security model.
- *
+ * {@link SecurityParameters} implementation for the {@link TSM}
+ * security model.
  * @author Frank Fock
  * @version 2.0
  * @since 2.0
  */
 public class TsmSecurityParameters extends OctetString implements SecurityParameters {
 
-    private static final long serialVersionUID = -5023439920109160465L;
-    private int securityParametersPosition;
-    private int decodedLength = -1;
+  private int securityParametersPosition;
+  private int decodedLength = -1;
 
-    public TsmSecurityParameters() {
-        super();
-    }
+  public TsmSecurityParameters() {
+    super();
+  }
 
-    @Override
-    public int getSecurityParametersPosition() {
-        return securityParametersPosition;
-    }
+  @Override
+  public int getSecurityParametersPosition() {
+    return securityParametersPosition;
+  }
 
-    @Override
-    public void setSecurityParametersPosition(int pos) {
-        this.securityParametersPosition = pos;
-    }
+  @Override
+  public void setSecurityParametersPosition(int pos) {
+    this.securityParametersPosition = pos;
+  }
 
-    @Override
-    public int getBERMaxLength(int securityLevel) {
-        return getBERLength();
-    }
+  @Override
+  public int getBERMaxLength(int securityLevel) {
+    return getBERLength();
+  }
 
-    @Override
-    public void decodeBER(BERInputStream inputStream) throws IOException {
-        long startPos = inputStream.getPosition();
-        super.decodeBER(inputStream);
-        decodedLength = (int) (inputStream.getPosition() - startPos);
-    }
+  @Override
+  public void decodeBER(BERInputStream inputStream) throws IOException {
+    long startPos = inputStream.getPosition();
+    super.decodeBER(inputStream);
+    decodedLength = (int) (inputStream.getPosition() - startPos);
+  }
 
-    /**
-     * Gets the position of the {@link org.snmp4j.ScopedPDU}.
-     *
-     * @return the start position in the {@link BERInputStream}.
-     */
-    public int getScopedPduPosition() {
-        if (decodedLength >= 0) {
-            return decodedLength + getSecurityParametersPosition();
-        } else {
-            return getSecurityParametersPosition() + getBERLength();
-        }
+  /**
+   * Gets the position of the {@link org.snmp4j.ScopedPDU}.
+   *
+   * @return
+   *    the start position in the {@link BERInputStream}.
+   */
+  public int getScopedPduPosition() {
+    if (decodedLength >= 0) {
+      return decodedLength + getSecurityParametersPosition();
     }
+    else {
+      return getSecurityParametersPosition()+getBERLength();
+    }
+  }
 
 }

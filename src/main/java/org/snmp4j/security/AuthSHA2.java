@@ -1,8 +1,8 @@
 /*_############################################################################
   _## 
-  _##  SNMP4J - AuthSHA2.java  
+  _##  SNMP4J 2 - AuthSHA2.java  
   _## 
-  _##  Copyright (C) 2003-2018  Frank Fock and Jochen Katz (SNMP4J.org)
+  _##  Copyright (C) 2003-2016  Frank Fock and Jochen Katz (SNMP4J.org)
   _##  
   _##  Licensed under the Apache License, Version 2.0 (the "License");
   _##  you may not use this file except in compliance with the License.
@@ -47,7 +47,6 @@ public class AuthSHA2 extends AuthGeneric {
    * @deprecated Use {@link #AuthSHA2(String, OID, int, int, int)} instead to specify the correct
    *   HMAC block size
    */
-  @Deprecated
   public AuthSHA2(String protocolName, OID protocolOID, int digestLength, int authenticationCodeLength) {
     super(protocolName, digestLength, authenticationCodeLength);
     this.protocolID = protocolOID;

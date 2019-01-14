@@ -269,11 +269,6 @@ public class SnmpTest extends TestCase {
                 2, 5, 0, 0, 0, 0);
     }
 
-    public void testTableUtilsNewRowsMultiThreadedDelay0() throws Exception {
-        runTableUtilsTest(true, 0, 40,
-                4, 4, 0, 0, 0, 0);
-    }
-
     public void testTableUtilsOutOfOrderMultiThreadedDelay200() throws Exception {
         runTableUtilsTest(true, 200, 10,
                 2, 5, 0, 0, 0, 0);
@@ -335,7 +330,18 @@ public class SnmpTest extends TestCase {
                                 new OctetString("" + 1 + "." + c)));
                     }
                     else {
-                        addReqAndRespColOnRow(maxRows, r, responsePdu, requestPdu, c);
+                        if (r == 0) {
+                            requestPdu.add(new VariableBinding(new OID("1.3.6.1.4976.1." + c), new Null()));
+                        } else {
+                            requestPdu.add(new VariableBinding(new OID("1.3.6.1.4976.1." + c + "." + ((2*r)-1)), new Null()));
+                        }
+                        if ((r >= maxRows)) {
+                            responsePdu.add(new VariableBinding(new OID("1.3.6.1.4976.1." + (c + 1) + "." + 1),
+                                    new OctetString("" + 1 + "." + (c + 1))));
+                        } else {
+                            responsePdu.add(new VariableBinding(new OID("1.3.6.1.4976.1." + c + "." + ((2*r)+1)),
+                                    new OctetString("" + (r+1) + "." + c)));
+                        }
                     }
                 }
                 responsePdu.setRequestID(new Integer32(requestPdu.getVariableBindings().hashCode()));
@@ -362,10 +368,9 @@ public class SnmpTest extends TestCase {
         TableUtils tableUtils = new TableUtils(snmpCommandGenerator, new DefaultPDUFactory(PDU.GETNEXT)) {
             @Override
             protected TableRequest createTableRequest(Target target, OID[] columnOIDs, TableListener listener,
-                                                      Object userObject, OID lowerBoundIndex, OID upperBoundIndex,
-                                                      SparseTableMode sparseTableMode) {
+                                                      Object userObject, OID lowerBoundIndex, OID upperBoundIndex) {
                 return new TableRequest(target, columnOIDs, listener,
-                        userObject, lowerBoundIndex, upperBoundIndex, sparseTableMode) {
+                        userObject, lowerBoundIndex, upperBoundIndex) {
                     @Override
                     public void onResponse(ResponseEvent event) {
                         LOGGER.debug("Table response:" + event);
@@ -426,21 +431,6 @@ public class SnmpTest extends TestCase {
                     i += 2;
                 }
             }
-        }
-    }
-
-    private void addReqAndRespColOnRow(int maxRows, int r, PDU responsePdu, PDU requestPdu, int c) {
-        if (r == 0) {
-            requestPdu.add(new VariableBinding(new OID("1.3.6.1.4976.1." + c), new Null()));
-        } else {
-            requestPdu.add(new VariableBinding(new OID("1.3.6.1.4976.1." + c + "." + ((2*r)-1)), new Null()));
-        }
-        if ((r >= maxRows)) {
-            responsePdu.add(new VariableBinding(new OID("1.3.6.1.4976.1." + (c + 1) + "." + 1),
-                    new OctetString("" + 1 + "." + (c + 1))));
-        } else {
-            responsePdu.add(new VariableBinding(new OID("1.3.6.1.4976.1." + c + "." + ((2*r)+1)),
-                    new OctetString("" + (r+1) + "." + c)));
         }
     }
 
@@ -623,7 +613,6 @@ public class SnmpTest extends TestCase {
 
     @Test
     public void testGetV3_RFC3414_3_2_5() throws Exception {
-        SecurityProtocols.getInstance().addAuthenticationProtocol(new AuthSHA());
         final UserTarget target = (UserTarget) userTarget.clone();
         target.setTimeout(5000);
         target.setVersion(SnmpConstants.version3);
@@ -693,7 +682,6 @@ public class SnmpTest extends TestCase {
 
     @Test
     public void testGetV3_RFC3414_3_2_6() throws Exception {
-        SecurityProtocols.getInstance().addAuthenticationProtocol(new AuthSHA());
         UserTarget target = (UserTarget) userTarget.clone();
         target.setTimeout(5000);
         target.setVersion(SnmpConstants.version3);
@@ -793,7 +781,7 @@ public class SnmpTest extends TestCase {
     }
 
 
-    private void unconfirmedTest(TransportMapping<?> transportMappingCG, Target target, PDU pdu) throws IOException {
+    private void unconfirmedTest(TransportMapping transportMappingCG, Target target, PDU pdu) throws IOException {
         Map<Integer, RequestResponse> queue = new HashMap<Integer, RequestResponse>(2);
         queue.put(pdu.getRequestID().getValue(), new RequestResponse(pdu, null));
         TestCommandResponder responder = new TestCommandResponder(snmpCommandResponder, queue);
@@ -1022,7 +1010,7 @@ public class SnmpTest extends TestCase {
         notifyV3(transportMappingCG);
     }
 
-    private void notifyV3(TransportMapping<?> transportMappingCG) throws IOException {
+    private void notifyV3(TransportMapping transportMappingCG) throws IOException {
         UserTarget target = (UserTarget) userTarget.clone();
         target.setTimeout(10000);
         target.setVersion(SnmpConstants.version3);
@@ -1224,19 +1212,19 @@ public class SnmpTest extends TestCase {
 
     public static class TestCommandResponder implements CommandResponder {
 
+        private Snmp commandResponder;
         private Map<Integer, RequestResponse> expectedPDUs;
         private boolean anyResponse;
         private long timeout = 0;
-        private Snmp snmpCommandResponder;
 
-        public TestCommandResponder(Snmp snmpCommandResponder, PDU request, PDU response) {
-            this.snmpCommandResponder = snmpCommandResponder;
+        public TestCommandResponder(Snmp commandResponder, PDU request, PDU response) {
+            this.commandResponder = commandResponder;
             this.expectedPDUs = new HashMap<Integer, RequestResponse>(1);
             expectedPDUs.put(request.getRequestID().getValue(), new RequestResponse(request, response));
         }
 
-        public TestCommandResponder(Snmp snmpCommandResponder, Map<Integer, RequestResponse> expectedPDUs) {
-            this.snmpCommandResponder = snmpCommandResponder;
+        public TestCommandResponder(Snmp commandResponder, Map<Integer, RequestResponse> expectedPDUs) {
+            this.commandResponder = commandResponder;
             this.expectedPDUs = expectedPDUs;
         }
 
@@ -1300,7 +1288,7 @@ public class SnmpTest extends TestCase {
                             }
                         }
                         expected.response.setRequestID(pdu.getRequestID());
-                        snmpCommandResponder.getMessageDispatcher().returnResponsePdu(
+                        commandResponder.getMessageDispatcher().returnResponsePdu(
                                 event.getMessageProcessingModel(), event.getSecurityModel(),
                                 event.getSecurityName(), event.getSecurityLevel(),
                                 expected.response, event.getMaxSizeResponsePDU(),

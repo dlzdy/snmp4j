@@ -1,8 +1,8 @@
 /*_############################################################################
   _## 
-  _##  SNMP4J - TransportStateEvent.java  
+  _##  SNMP4J 2 - TransportStateEvent.java  
   _## 
-  _##  Copyright (C) 2003-2018  Frank Fock and Jochen Katz (SNMP4J.org)
+  _##  Copyright (C) 2003-2016  Frank Fock and Jochen Katz (SNMP4J.org)
   _##  
   _##  Licensed under the Apache License, Version 2.0 (the "License");
   _##  you may not use this file except in compliance with the License.
@@ -50,8 +50,7 @@ public class TransportStateEvent extends EventObject {
 
   private boolean cancelled = false;
 
-
-  public TransportStateEvent(AbstractTransportMapping<?> source,
+  public TransportStateEvent(TcpTransportMapping source,
                              Address peerAddress,
                              int newState,
                              IOException causingException) {
@@ -61,7 +60,7 @@ public class TransportStateEvent extends EventObject {
     this.causingException = causingException;
   }
 
-  public TransportStateEvent(AbstractTransportMapping<?> source,
+  public TransportStateEvent(TcpTransportMapping source,
                              Address peerAddress,
                              int newState,
                              IOException causingException,

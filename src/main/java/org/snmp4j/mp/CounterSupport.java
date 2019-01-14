@@ -1,8 +1,8 @@
 /*_############################################################################
   _## 
-  _##  SNMP4J - CounterSupport.java  
+  _##  SNMP4J 2 - CounterSupport.java  
   _## 
-  _##  Copyright (C) 2003-2018  Frank Fock and Jochen Katz (SNMP4J.org)
+  _##  Copyright (C) 2003-2016  Frank Fock and Jochen Katz (SNMP4J.org)
   _##  
   _##  Licensed under the Apache License, Version 2.0 (the "License");
   _##  you may not use this file except in compliance with the License.
@@ -22,73 +22,72 @@
 package org.snmp4j.mp;
 
 import org.snmp4j.event.*;
-
 import java.util.*;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * The <code>CounterSupport</code> class provides support to fire
  * {@link CounterEvent} to registered listeners.
- *
  * @author Frank Fock
- * @version 3.0
+ * @version 1.0
  */
 public class CounterSupport {
 
-    protected static CounterSupport instance = null;
-    private transient List<CounterListener> counterListeners = new CopyOnWriteArrayList<>();
+  protected static CounterSupport instance = null;
+  private transient Vector<CounterListener> counterListeners;
 
-    protected CounterSupport() {
-    }
+  protected CounterSupport() {
+  }
 
-    /**
-     * Gets the counter support singleton.
-     *
-     * @return the <code>CounterSupport</code> instance.
-     */
-    public static CounterSupport getInstance() {
-        if (instance == null) {
-            instance = new CounterSupport();
-        }
-        return instance;
+  /**
+   * Gets the counter support singleton.
+   * @return
+   *    the <code>CounterSupport</code> instance.
+   */
+  public static CounterSupport getInstance() {
+    if (instance == null) {
+      instance = new CounterSupport();
     }
+    return instance;
+  }
 
-    /**
-     * Adds a <code>CounterListener</code>.
-     *
-     * @param listener
-     *         a <code>CounterListener</code> instance that needs to be informed when
-     *         a counter needs to be incremented.
-     */
-    public void addCounterListener(CounterListener listener) {
-        if (!counterListeners.contains(listener)) {
-            counterListeners.add(listener);
-        }
+  /**
+   * Adds a <code>CounterListener</code>.
+   * @param listener
+   *    a <code>CounterListener</code> instance that needs to be informed when
+   *    a counter needs to be incremented.
+   */
+  public synchronized void addCounterListener(CounterListener listener) {
+    if (counterListeners == null) {
+      counterListeners = new Vector<CounterListener>(2);
     }
+    if (!counterListeners.contains(listener)) {
+      counterListeners.add(listener);
+    }
+  }
 
-    /**
-     * Removes a previously added <code>CounterListener</code>.
-     *
-     * @param listener
-     *         a <code>CounterListener</code> instance.
-     */
-    public void removeCounterListener(CounterListener listener) {
-        counterListeners.remove(listener);
+  /**
+   * Removes a previously added <code>CounterListener</code>.
+   * @param listener
+   *    a <code>CounterListener</code> instance.
+   */
+  public synchronized void removeCounterListener(CounterListener listener) {
+    if (counterListeners != null && counterListeners.contains(listener)) {
+      counterListeners.removeElement(listener);
     }
+  }
 
-    /**
-     * Inform all registered listeners that the supplied counter needs to be
-     * incremented.
-     *
-     * @param event
-     *         a <code>CounterEvent</code> containing information about the counter to
-     *         be incremented.
-     */
-    public void fireIncrementCounter(CounterEvent event) {
-        if (counterListeners != null) {
-            for (CounterListener l : counterListeners) {
-                l.incrementCounter(event);
-            }
-        }
+  /**
+   * Inform all registered listeners that the supplied counter needs to be
+   * incremented.
+   * @param event
+   *    a <code>CounterEvent</code> containing information about the counter to
+   *    be incremented.
+   */
+  public void fireIncrementCounter(CounterEvent event) {
+    if (counterListeners != null) {
+      for (CounterListener l: counterListeners) {
+        l.incrementCounter(event);
+      }
     }
+  }
 }

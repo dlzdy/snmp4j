@@ -1,8 +1,8 @@
 /*_############################################################################
   _## 
-  _##  SNMP4J - LogAdapter.java  
+  _##  SNMP4J 2 - LogAdapter.java  
   _## 
-  _##  Copyright (C) 2003-2018  Frank Fock and Jochen Katz (SNMP4J.org)
+  _##  Copyright (C) 2003-2016  Frank Fock and Jochen Katz (SNMP4J.org)
   _##  
   _##  Licensed under the Apache License, Version 2.0 (the "License");
   _##  you may not use this file except in compliance with the License.
@@ -36,127 +36,118 @@ import java.util.Iterator;
  */
 public interface LogAdapter {
 
-    /**
-     * Checks whether DEBUG level logging is activated for this log adapter.
-     *
-     * @return <code>true</code> if logging is enabled or <code>false</code> otherwise.
-     */
-    boolean isDebugEnabled();
+  /**
+   * Checks whether DEBUG level logging is activated for this log adapter.
+   * @return
+   *    <code>true</code> if logging is enabled or <code>false</code> otherwise.
+   */
+  boolean isDebugEnabled();
 
-    /**
-     * Checks whether INFO level logging is activated for this log adapter.
-     *
-     * @return <code>true</code> if logging is enabled or <code>false</code> otherwise.
-     */
-    boolean isInfoEnabled();
+  /**
+   * Checks whether INFO level logging is activated for this log adapter.
+   * @return
+   *    <code>true</code> if logging is enabled or <code>false</code> otherwise.
+   */
+  boolean isInfoEnabled();
 
-    /**
-     * Checks whether WARN level logging is activated for this log adapter.
-     *
-     * @return <code>true</code> if logging is enabled or <code>false</code> otherwise.
-     */
-    boolean isWarnEnabled();
+  /**
+   * Checks whether WARN level logging is activated for this log adapter.
+   * @return
+   *    <code>true</code> if logging is enabled or <code>false</code> otherwise.
+   */
+  boolean isWarnEnabled();
 
-    /**
-     * Logs a debug message.
-     *
-     * @param message
-     *         the message to log.
-     */
-    void debug(Serializable message);
+  /**
+   * Logs a debug message.
+   * @param message
+   *    the message to log.
+   */
+  void debug(Serializable message);
 
-    /**
-     * Logs an informational message.
-     *
-     * @param message
-     *         the message to log.
-     */
-    void info(CharSequence message);
+  /**
+   * Logs an informational message.
+   * @param message
+   *    the message to log.
+   */
+  void info(CharSequence message);
 
-    /**
-     * Logs an warning message.
-     *
-     * @param message
-     *         the message to log.
-     */
-    void warn(Serializable message);
+  /**
+   * Logs an warning message.
+   * @param message
+   *    the message to log.
+   */
+  void warn(Serializable message);
 
-    /**
-     * Logs an error message.
-     *
-     * @param message
-     *         the message to log.
-     */
-    void error(Serializable message);
+  /**
+   * Logs an error message.
+   * @param message
+   *    the message to log.
+   */
+  void error(Serializable message);
 
-    /**
-     * Logs an error message.
-     *
-     * @param message
-     *         the message to log.
-     * @param throwable
-     *         the exception that caused to error.
-     */
-    void error(CharSequence message, Throwable throwable);
+  /**
+   * Logs an error message.
+   * @param message
+   *    the message to log.
+   * @param throwable
+   *    the exception that caused to error.
+   */
+  void error(CharSequence message, Throwable throwable);
 
-    /**
-     * Logs a fatal message.
-     *
-     * @param message
-     *         the message to log.
-     */
-    void fatal(Object message);
+  /**
+   * Logs a fatal message.
+   * @param message
+   *    the message to log.
+   */
+  void fatal(Object message);
 
-    /**
-     * Logs a fatal message.
-     *
-     * @param message
-     *         the message to log.
-     * @param throwable
-     *         the exception that caused to error.
-     */
-    void fatal(CharSequence message, Throwable throwable);
+  /**
+   * Logs a fatal message.
+   * @param message
+   *    the message to log.
+   * @param throwable
+   *    the exception that caused to error.
+   */
+  void fatal(CharSequence message, Throwable throwable);
 
-    /**
-     * Sets the log level for this log adapter (if applicable).
-     *
-     * @param level
-     *         a LogLevel instance.
-     *
-     * @since 1.6.1
-     */
-    void setLogLevel(LogLevel level);
+  /**
+   * Sets the log level for this log adapter (if applicable).
+   * @param level
+   *    a LogLevel instance.
+   * @since 1.6.1
+   */
+  void setLogLevel(LogLevel level);
 
-    /**
-     * Returns the log level defined for this log adapter.
-     *
-     * @return a LogLevel instance.
-     * @since 1.6.1
-     */
-    LogLevel getLogLevel();
+  /**
+   * Returns the log level defined for this log adapter.
+   * @return
+   *    a LogLevel instance.
+   * @since 1.6.1
+   */
+  LogLevel getLogLevel();
 
-    /**
-     * Returns the log level that is effective for this log adapter.
-     * The effective log level is the first log level different from
-     * {@link LogLevel#NONE} to the root.
-     *
-     * @return a LogLevel different than {@link LogLevel#NONE}.
-     * @since 1.6.1
-     */
-    LogLevel getEffectiveLogLevel();
+  /**
+   * Returns the log level that is effective for this log adapter.
+   * The effective log level is the first log level different from
+   * {@link LogLevel#NONE} to the root.
+   * @return
+   *    a LogLevel different than {@link LogLevel#NONE}.
+   * @since 1.6.1
+   */
+  LogLevel getEffectiveLogLevel();
 
-    /**
-     * Returns the name of the logger.
-     *
-     * @return the name of the logger.
-     */
-    String getName();
+  /**
+   * Returns the name of the logger.
+   * @return
+   *   the name of the logger.
+   */
+  String getName();
 
-    /**
-     * Returns the log handlers associated with this logger.
-     *
-     * @return an Iterator of log system dependent log handlers.
-     * @since 1.6.1
-     */
-    Iterator<?> getLogHandler();
+  /**
+   * Returns the log handlers associated with this logger.
+   * @return
+   *    an Iterator of log system dependent log handlers.
+   * @since 1.6.1
+   */
+  Iterator getLogHandler();
 }

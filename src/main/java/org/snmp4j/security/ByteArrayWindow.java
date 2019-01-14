@@ -1,8 +1,8 @@
 /*_############################################################################
   _## 
-  _##  SNMP4J - ByteArrayWindow.java  
+  _##  SNMP4J 2 - ByteArrayWindow.java  
   _## 
-  _##  Copyright (C) 2003-2018  Frank Fock and Jochen Katz (SNMP4J.org)
+  _##  Copyright (C) 2003-2016  Frank Fock and Jochen Katz (SNMP4J.org)
   _##  
   _##  Licensed under the Apache License, Version 2.0 (the "License");
   _##  you may not use this file except in compliance with the License.
@@ -19,117 +19,103 @@
   _##########################################################################*/
 package org.snmp4j.security;
 
-import java.util.Arrays;
-import java.util.Objects;
-
 /**
  * The <code>ByteArrayWindow</code> provides windowed access to a subarray
  * of a byte array.
- *
  * @author Frank Fock
  * @version 1.0
  */
 public class ByteArrayWindow {
 
-    private byte[] value;
-    private int offset;
-    private int length;
+  private byte[] value;
+  private int offset;
+  private int length;
 
-    /**
-     * Creates a byte array window that provides access to the bytes in the
-     * supplied array between the position starting at the supplied offset.
-     *
-     * @param value
-     *         the underlying byte array.
-     * @param offset
-     *         the starting position of the created window.
-     * @param length
-     *         the length of the window.
-     */
-    public ByteArrayWindow(byte[] value, int offset, int length) {
-        this.value = value;
-        this.offset = offset;
-        this.length = length;
+  /**
+   * Creates a byte array window that provides access to the bytes in the
+   * supplied array between the position starting at the supplied offset.
+   * @param value
+   *    the underlying byte array.
+   * @param offset
+   *    the starting position of the created window.
+   * @param length
+   *    the length of the window.
+   */
+  public ByteArrayWindow(byte[] value, int offset, int length) {
+    this.value = value;
+    this.offset = offset;
+    this.length = length;
+  }
+
+  public byte[] getValue() {
+    return value;
+  }
+
+  public void setValue(byte[] value) {
+    this.value = value;
+  }
+
+  public int getOffset() {
+    return offset;
+  }
+
+  public void set(int i, byte b) {
+    if (i >= length) {
+      throw new IndexOutOfBoundsException("" + i + " >= " + length);
     }
-
-    public byte[] getValue() {
-        return value;
+    if (i < 0) {
+      throw new IndexOutOfBoundsException("" + i);
     }
+    this.value[i+offset] = b;
+  }
 
-    public void setValue(byte[] value) {
-        this.value = value;
+  public byte get(int i) {
+    if (i >= length) {
+      throw new IndexOutOfBoundsException("" + i + " >= " + length);
     }
-
-    public int getOffset() {
-        return offset;
+    if (i < 0) {
+      throw new IndexOutOfBoundsException("" + i);
     }
+    return value[i+offset];
+  }
 
-    public void set(int i, byte b) {
-        if (i >= length) {
-            throw new IndexOutOfBoundsException("" + i + " >= " + length);
-        }
-        if (i < 0) {
-            throw new IndexOutOfBoundsException("" + i);
-        }
-        this.value[i + offset] = b;
-    }
+  public int getLength() {
+    return length;
+  }
 
-    public byte get(int i) {
-        if (i >= length) {
-            throw new IndexOutOfBoundsException("" + i + " >= " + length);
-        }
-        if (i < 0) {
-            throw new IndexOutOfBoundsException("" + i);
-        }
-        return value[i + offset];
-    }
-
-    public int getLength() {
-        return length;
-    }
-
-    /**
-     * Indicates whether some other object is "equal to" this one.
-     *
-     * @param obj
-     *         the reference object with which to compare.
-     *
-     * @return <code>true</code> if this object is the same as the obj argument;
-     * <code>false</code> otherwise.
-     */
-    public boolean equals(Object obj) {
-        if (obj instanceof ByteArrayWindow) {
-            ByteArrayWindow other = (ByteArrayWindow) obj;
-            if (other.length != length) {
-                return false;
-            }
-            for (int i = 0; i < length; i++) {
-                if (other.value[i] != value[i]) {
-                    return false;
-                }
-            }
-            return true;
-        }
+  /**
+   * Indicates whether some other object is "equal to" this one.
+   *
+   * @param obj the reference object with which to compare.
+   * @return <code>true</code> if this object is the same as the obj argument;
+   *   <code>false</code> otherwise.
+   */
+  public boolean equals(Object obj) {
+    if (obj instanceof ByteArrayWindow) {
+      ByteArrayWindow other = (ByteArrayWindow) obj;
+      if (other.length != length) {
         return false;
-    }
-
-    public boolean equals(ByteArrayWindow other, int maxBytesToCompare) {
-        if ((other.length < maxBytesToCompare) ||
-                (length < maxBytesToCompare)) {
-            return false;
+      }
+      for (int i=0; i<length; i++) {
+        if (other.value[i] != value[i]) {
+          return false;
         }
-        for (int i = 0; i < maxBytesToCompare; i++) {
-            if (value[offset + i] != other.value[other.offset + i]) {
-                return false;
-            }
-        }
-        return true;
+      }
+      return true;
     }
+    return false;
+  }
 
-    @Override
-    public int hashCode() {
-        int result = Objects.hash(getOffset(), getLength());
-        result = 31 * result + Arrays.hashCode(getValue());
-        return result;
+  public boolean equals(ByteArrayWindow other, int maxBytesToCompare) {
+    if ((other.length < maxBytesToCompare) ||
+        (length < maxBytesToCompare)) {
+      return false;
     }
+    for (int i=0; i<maxBytesToCompare; i++) {
+      if (value[offset+i] != other.value[other.offset+i]) {
+        return false;
+      }
+    }
+    return true;
+  }
 }

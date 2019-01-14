@@ -1,8 +1,8 @@
 /*_############################################################################
   _## 
-  _##  SNMP4J - SecurityNameMapping.java  
+  _##  SNMP4J 2 - SecurityNameMapping.java  
   _## 
-  _##  Copyright (C) 2003-2018  Frank Fock and Jochen Katz (SNMP4J.org)
+  _##  Copyright (C) 2003-2016  Frank Fock and Jochen Katz (SNMP4J.org)
   _##  
   _##  Licensed under the Apache License, Version 2.0 (the "License");
   _##  you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ package org.snmp4j.transport.tls;
 import org.snmp4j.smi.OctetString;
 
 /**
- * The {@code SecurityNameMapping} maps a X509 certificate identified by it
+ * The <tt>SecurityNameMapping</tt> maps a X509 certificate identified by its
  * fingerprint to a security name based on a mapping defined by
  * {@link CertMappingType}.
  *
@@ -32,66 +32,67 @@ import org.snmp4j.smi.OctetString;
  */
 public class SecurityNameMapping {
 
-    public enum CertMappingType {Specified, SANRFC822Name, SANDNSName, SANIpAddress, SANAny, CommonName}
+  public enum CertMappingType
+  { Specified, SANRFC822Name, SANDNSName, SANIpAddress, SANAny, CommonName }
 
-    private OctetString fingerprint;
-    private OctetString data;
-    private CertMappingType type;
-    private OctetString securityName;
+  private OctetString fingerprint;
+  private OctetString data;
+  private CertMappingType type;
+  private OctetString securityName;
 
-    public SecurityNameMapping(OctetString fingerprint, OctetString data, CertMappingType type,
-                               OctetString securityName) {
-        this.fingerprint = fingerprint;
-        this.data = data;
-        this.type = type;
-        this.securityName = securityName;
-    }
+  public SecurityNameMapping(OctetString fingerprint, OctetString data, CertMappingType type,
+                             OctetString securityName) {
+    this.fingerprint = fingerprint;
+    this.data = data;
+    this.type = type;
+    this.securityName = securityName;
+  }
 
-    public OctetString getFingerprint() {
-        return fingerprint;
-    }
+  public OctetString getFingerprint() {
+    return fingerprint;
+  }
 
-    public OctetString getData() {
-        return data;
-    }
+  public OctetString getData() {
+    return data;
+  }
 
-    public CertMappingType getType() {
-        return type;
-    }
+  public CertMappingType getType() {
+    return type;
+  }
 
-    public OctetString getSecurityName() {
-        return securityName;
-    }
+  public OctetString getSecurityName() {
+    return securityName;
+  }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
 
-        org.snmp4j.transport.tls.SecurityNameMapping that = (org.snmp4j.transport.tls.SecurityNameMapping) o;
+    org.snmp4j.transport.tls.SecurityNameMapping that = (org.snmp4j.transport.tls.SecurityNameMapping) o;
 
-        if (data != null ? !data.equals(that.data) : that.data != null) return false;
-        if (fingerprint != null ? !fingerprint.equals(that.fingerprint) : that.fingerprint != null) return false;
-        if (type != that.type) return false;
+    if (data != null ? !data.equals(that.data) : that.data != null) return false;
+    if (fingerprint != null ? !fingerprint.equals(that.fingerprint) : that.fingerprint != null) return false;
+    if (type != that.type) return false;
 
-        return true;
-    }
+    return true;
+  }
 
-    @Override
-    public int hashCode() {
-        int result = fingerprint != null ? fingerprint.hashCode() : 0;
-        result = 31 * result + (data != null ? data.hashCode() : 0);
-        result = 31 * result + (type != null ? type.hashCode() : 0);
-        return result;
-    }
+  @Override
+  public int hashCode() {
+    int result = fingerprint != null ? fingerprint.hashCode() : 0;
+    result = 31 * result + (data != null ? data.hashCode() : 0);
+    result = 31 * result + (type != null ? type.hashCode() : 0);
+    return result;
+  }
 
-    @Override
-    public String toString() {
-        return "SecurityNameMapping{" +
-                "fingerprint=" + fingerprint +
-                ", data=" + data +
-                ", type=" + type +
-                ", securityName=" + securityName +
-                '}';
-    }
+  @Override
+  public String toString() {
+    return "SecurityNameMapping{" +
+        "fingerprint=" + fingerprint +
+        ", data=" + data +
+        ", type=" + type +
+        ", securityName=" + securityName +
+        '}';
+  }
 }

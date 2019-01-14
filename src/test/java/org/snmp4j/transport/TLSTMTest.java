@@ -75,7 +75,6 @@ public class TLSTMTest {
     public void setUp() throws Exception {
 
         tlstmCS = new TLSTM();
-        tlstmCS.setServerEnabled(false);
         tlstmCR = new TLSTM(new TlsAddress("127.0.0.1/0"));
         tlstmCR.setServerEnabled(true);
         URL keystoreUrl = getClass().getResource("dtls-cert.ks");
@@ -89,8 +88,8 @@ public class TLSTMTest {
         tlstmCR.setTrustStore(keystoreUrl.getFile());
         tlstmCR.setTrustStorePassword(password);
 
-        tlstmCR.setProtocolVersions(new String[]{"TLSv1.2"});
-        tlstmCS.setProtocolVersions(new String[]{"TLSv1.2"});
+        tlstmCR.setTlsProtocols(new String[]{"TLSv1.2"});
+        tlstmCS.setTlsProtocols(new String[]{"TLSv1.2"});
     }
 
     @After
@@ -102,7 +101,8 @@ public class TLSTMTest {
     @Test
     public void sendMessage() throws Exception {
         final boolean[] messageReceived = { false };
-        CertifiedTarget certifiedTarget = new CertifiedTarget(new TlsAddress(tlstmCR.getListenAddress()),
+        CertifiedTarget certifiedTarget = new CertifiedTarget(
+                new TlsAddress(tlstmCR.getListenAddress().getInetAddress(), tlstmCR.getListenAddress().getPort()),
                 new OctetString(SEC_NAME), SERVER_FINGER_PRINT, CLIENT_FINGER_PRINT);
         TransportStateReference tmStateReference =
                 new TransportStateReference(tlstmCS,
@@ -113,7 +113,7 @@ public class TLSTMTest {
                         false, null, certifiedTarget);
         final TransportListener transportListener = new TransportListener() {
             @Override
-            public synchronized void processMessage(TransportMapping<?> sourceTransport, Address incomingAddress,
+            public synchronized void processMessage(TransportMapping sourceTransport, Address incomingAddress,
                                                     ByteBuffer wholeMessage, TransportStateReference tmStateReference) {
                 byte[] message = new byte[wholeMessage.limit()];
                 System.arraycopy(wholeMessage.array(), 0, message, 0, message.length);
@@ -124,9 +124,8 @@ public class TLSTMTest {
         };
         tlstmCR.addTransportListener(transportListener);
         tlstmCR.listen();
-        tlstmCS.listen();
         synchronized (transportListener) {
-            tlstmCS.sendMessage(tlstmCR.getListenAddress(), MESSAGE, tmStateReference, 3000, 0);
+            tlstmCS.sendMessage(tlstmCR.getListenAddress(), MESSAGE, tmStateReference);
             transportListener.wait(3200);
         }
         assertTrue(messageReceived[0]);
@@ -136,10 +135,12 @@ public class TLSTMTest {
     public void sendMessageWithPDU() throws Exception {
         tlstmCR.listen();
         final boolean[] messageReceived = { false };
-        CertifiedTarget certifiedTarget = new CertifiedTarget(new TlsAddress(tlstmCR.getListenAddress()),
+        CertifiedTarget certifiedTarget = new CertifiedTarget(
+                new TlsAddress(tlstmCR.getListenAddress().getInetAddress(), tlstmCR.getListenAddress().getPort()),
                 new OctetString(SEC_NAME), SERVER_FINGER_PRINT, CLIENT_FINGER_PRINT);
         certifiedTarget.setTimeout(100);
         certifiedTarget.setRetries(0);
+        certifiedTarget.setSecurityModel(4);
         final CommandResponder commandResponder = new CommandResponder() {
 
             @Override
@@ -189,10 +190,12 @@ public class TLSTMTest {
         tlstmCR.setMaxInboundMessageSize(65535);
         tlstmCR.listen();
         final boolean[] messageReceived = { false };
-        CertifiedTarget certifiedTarget = new CertifiedTarget(new TlsAddress(tlstmCR.getListenAddress()),
+        CertifiedTarget certifiedTarget = new CertifiedTarget(
+                new TlsAddress(tlstmCR.getListenAddress().getInetAddress(), tlstmCR.getListenAddress().getPort()),
                 new OctetString(SEC_NAME), SERVER_FINGER_PRINT, CLIENT_FINGER_PRINT);
-        certifiedTarget.setTimeout(10000);
+        certifiedTarget.setTimeout(2000);
         certifiedTarget.setRetries(0);
+        certifiedTarget.setSecurityModel(4);
         final CommandResponder commandResponder = new CommandResponder() {
 
             @Override
@@ -213,7 +216,6 @@ public class TLSTMTest {
         Snmp snmpAgent = new Snmp(tlstmCR);
         snmpAgent.addCommandResponder(commandResponder);
         ScopedPDU scopedPDU = new ScopedPDU();
-        //scopedPDU.setType(PDU.INFORM);
         UnsignedInteger32 value1 = new UnsignedInteger32(91589156l);
         OctetString value2 = new OctetString("peWadfnagnergrDFAAHAräöß394");
         scopedPDU.add(new VariableBinding(SnmpConstants.snmp4jStatsRequestRetries, value1));
@@ -229,16 +231,11 @@ public class TLSTMTest {
         snmp.listen();
         snmpAgent.setLocalEngine(localEngineID.getValue(), 1, 1);
         snmpAgent.listen();
-        final ResponseListener responseListener = new ResponseListener() {
-            @Override
-            public synchronized void onResponse(ResponseEvent event) {
-            }
-        };
         synchronized (commandResponder) {
-            snmp.send(scopedPDU, certifiedTarget, null, responseListener);
-            commandResponder.wait(5000);
+            snmp.send(scopedPDU, certifiedTarget);
+            commandResponder.wait(2000);
         }
-        assertTrue("PDU not received by command responder", messageReceived[0]);
+        assertTrue(messageReceived[0]);
         snmp.close();
         snmpAgent.close();
     }
@@ -254,7 +251,7 @@ public class TLSTMTest {
                 while (outNet.hasRemaining()) {
                     for (int start = outNet.position(), end = outNet.limit(),
                         packetLength = 500; start < end; start = outNet.limit()) {
-                        int num = sc.write(outNet.position(start).limit(start + Math.min(end - start, packetLength)));
+                        int num = sc.write((ByteBuffer)outNet.position(start).limit(start + Math.min(end - start, packetLength)));
                         try {
                             Thread.sleep(100);
                         } catch (InterruptedException e) {
@@ -275,15 +272,17 @@ public class TLSTMTest {
         tlstmCS.setKeyStorePassword(password);
         tlstmCS.setTrustStore(keystoreUrl.getFile());
         tlstmCS.setTrustStorePassword(password);
-        tlstmCS.setProtocolVersions(new String[]{"TLSv1.2"});
+        tlstmCS.setTlsProtocols(new String[]{"TLSv1.2"});
         tlstmCS.setMaxInboundMessageSize(32768);
         tlstmCR.setMaxInboundMessageSize(32768);
         tlstmCR.listen();
         final boolean[] messageReceived = { false };
-        CertifiedTarget certifiedTarget = new CertifiedTarget(new TlsAddress(tlstmCR.getListenAddress()),
+        CertifiedTarget certifiedTarget = new CertifiedTarget(
+                new TlsAddress(tlstmCR.getListenAddress().getInetAddress(), tlstmCR.getListenAddress().getPort()),
                 new OctetString(SEC_NAME), SERVER_FINGER_PRINT, CLIENT_FINGER_PRINT);
         certifiedTarget.setTimeout(10000);
         certifiedTarget.setRetries(0);
+        certifiedTarget.setSecurityModel(4);
         final CommandResponder commandResponder = new CommandResponder() {
 
             @Override
@@ -350,10 +349,11 @@ public class TLSTMTest {
                 new OctetString(SEC_NAME), SERVER_FINGER_PRINT, CLIENT_FINGER_PRINT);
         target.setTimeout(TIMEOUT);
         target.setVersion(SnmpConstants.version3);
+        target.setSecurityModel(4);
         ScopedPDU pdu = new ScopedPDU();
         pdu.setType(PDU.NOTIFICATION);
         pdu.setContextName(new OctetString("myContext"));
-        SnmpTest.addTestVariableBindings(pdu, true, false, target.getVersion());
+        SnmpTest.addTestVariableBindings(pdu, false, false, target.getVersion());
         Snmp snmp = new Snmp(tlstmCS);
         pdu.setRequestID(new Integer32(snmp.getNextRequestID()));
         unconfirmedTest(snmpCommandResponder, snmp, tlstmCS, target, pdu);
@@ -361,7 +361,7 @@ public class TLSTMTest {
     }
 
     private void unconfirmedTest(Snmp snmpCommandResponder, Snmp snmpCommandGenerator,
-                                 TransportMapping<?> transportMappingCG, Target target, PDU pdu) throws IOException {
+                                 TransportMapping transportMappingCG, Target target, PDU pdu) throws IOException {
         Map<Integer, SnmpTest.RequestResponse> queue = new HashMap<Integer, SnmpTest.RequestResponse>(2);
         queue.put(pdu.getRequestID().getValue(), new SnmpTest.RequestResponse(pdu, null));
         SnmpTest.TestCommandResponder responder = new SnmpTest.TestCommandResponder(snmpCommandResponder, queue);

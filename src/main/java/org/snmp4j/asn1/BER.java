@@ -1,8 +1,8 @@
 /*_############################################################################
   _## 
-  _##  SNMP4J - BER.java  
+  _##  SNMP4J 2 - BER.java  
   _## 
-  _##  Copyright (C) 2003-2018  Frank Fock and Jochen Katz (SNMP4J.org)
+  _##  Copyright (C) 2003-2016  Frank Fock and Jochen Katz (SNMP4J.org)
   _##  
   _##  Licensed under the Apache License, Version 2.0 (the "License");
   _##  you may not use this file except in compliance with the License.
@@ -426,7 +426,7 @@ public class BER {
     return length;
   }
 
-  public static int getSubIDLength(int subID) {
+  private static int getSubIDLength(int subID) {
     int length;
     long v = subID & 0xFFFFFFFFL;
     if (v < 0x80) { //  7 bits long subid
@@ -492,7 +492,7 @@ public class BER {
     }
   }
 
-  public static void encodeSubID(OutputStream os, int subID) throws IOException {
+  private static void encodeSubID(OutputStream os, int subID) throws IOException {
     long subid = (subID & 0xFFFFFFFFL);
     if (subid < 127) {
       os.write((int)subid & 0xFF);
@@ -733,7 +733,7 @@ public class BER {
   }
 
 
-  public static String getPositionMessage(BERInputStream is) {
+  private static String getPositionMessage(BERInputStream is) {
     return " at position "+is.getPosition();
   }
 
@@ -867,7 +867,7 @@ public class BER {
     else if (subidentifier >= 0 && subidentifier < 80) {
       if (subidentifier < 40) {
         oid[0] = 0;
-//        oid[1] = subidentifier;
+        oid[1] = subidentifier;
       }
       else {
         oid[0] = 1;
@@ -881,12 +881,9 @@ public class BER {
     if (pos < 2) {
       pos = 2;
     }
-    if (pos < oid.length) {
-      int[] value = new int[pos];
-      System.arraycopy(oid, 0, value, 0, pos);
-      return value;
-    }
-    return oid;
+    int[] value = new int[pos];
+    System.arraycopy(oid, 0, value, 0, pos);
+    return value;
   }
 
   public static void decodeNull(BERInputStream is, MutableByte type)

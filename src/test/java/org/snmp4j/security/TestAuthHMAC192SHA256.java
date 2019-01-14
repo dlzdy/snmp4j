@@ -57,6 +57,7 @@ public class TestAuthHMAC192SHA256
     try {
       byte[] key = auth.passwordToKey(new OctetString(password), engineId);
       assertEquals(expectedKey.length, key.length);
+//      System.out.println("KEY="+new OctetString(key).toHexString());
       for (int i = 0; i < key.length; i++) {
         assertEquals("Diff at position "+i, key[i], expectedKey[i]);
       }
@@ -85,6 +86,7 @@ public class TestAuthHMAC192SHA256
     AuthHMAC192SHA256 auth = new AuthHMAC192SHA256();
     try {
       byte[] key = auth.passwordToKey(new OctetString(password), engineId);
+      //System.out.println("KEY="+new OctetString(key).toHexString());
       assertEquals(expectedKey.length, key.length);
       for (int i = 0; i < key.length; i++) {
         assertEquals(expectedKey[i], key[i]);
@@ -131,6 +133,7 @@ public class TestAuthHMAC192SHA256
       oldKey = auth.passwordToKey(new OctetString(oldPass), engineId);
       newKey = auth.passwordToKey(new OctetString(newPass), engineId);
       byte[] delta = auth.changeDelta(oldKey, newKey, random);
+      System.out.println("DELTA="+new OctetString(delta).toHexString());
       assertEquals(expectedDelta.length, delta.length);
       for (int i = 0; i < delta.length; i++) {
         assertEquals(delta[i], expectedDelta[i]);

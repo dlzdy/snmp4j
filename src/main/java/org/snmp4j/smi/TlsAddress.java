@@ -1,8 +1,8 @@
 /*_############################################################################
   _## 
-  _##  SNMP4J - TlsAddress.java  
+  _##  SNMP4J 2 - TlsAddress.java  
   _## 
-  _##  Copyright (C) 2003-2018  Frank Fock and Jochen Katz (SNMP4J.org)
+  _##  Copyright (C) 2003-2016  Frank Fock and Jochen Katz (SNMP4J.org)
   _##  
   _##  Licensed under the Apache License, Version 2.0 (the "License");
   _##  you may not use this file except in compliance with the License.
@@ -26,58 +26,49 @@ import org.snmp4j.log.LogFactory;
 import java.net.InetAddress;
 
 /**
- * The <code>TlsAddress</code> represents a TLS transport addresses as defined
+ * The <code>SshAddress</code> represents a SSH transport addresses as defined
  * by RFC 5953 SnmpTSLAddress textual convention.
  *
  * @author Frank Fock
- * @version 3.0.5
+ * @version 2.0
  * @since 2.0
  */
 public class TlsAddress extends TcpAddress {
 
-    static final long serialVersionUID = 0L;
+  static final long serialVersionUID = 0L;
 
-    private static final LogAdapter logger = LogFactory.getLogger(TlsAddress.class);
+  private static final LogAdapter logger = LogFactory.getLogger(SshAddress.class);
 
-    public TlsAddress() {
-        super();
+  public TlsAddress() {
+    super();
+  }
+
+  public TlsAddress(InetAddress inetAddress, int port) {
+    super(inetAddress, port);
+  }
+
+  public TlsAddress(String address) {
+    if (!parseAddress(address)) {
+      throw new IllegalArgumentException(address);
     }
+  }
 
-    public TlsAddress(InetAddress inetAddress, int port) {
-        super(inetAddress, port);
+  public static Address parse(String address) {
+    try {
+      TlsAddress a = new TlsAddress();
+      if (a.parseAddress(address)) {
+        return a;
+      }
     }
+    catch (Exception ex) {
+      logger.error(ex);
+    }
+    return null;
+  }
 
-    public TlsAddress(String address) {
-        if (!parseAddress(address)) {
-            throw new IllegalArgumentException(address);
-        }
-    }
-
-    /**
-     * Create a {@link TlsAddress} from a {@link TcpAddress}.
-     * @param tcpAddress
-     *    the {@link TcpAddress} for the new {@link TlsAddress}.
-     * @since 3.0.5
-     */
-    public TlsAddress(TcpAddress tcpAddress) {
-        super(tcpAddress.getInetAddress(), tcpAddress.getPort());
-    }
-
-    public static Address parse(String address) {
-        try {
-            TlsAddress a = new TlsAddress();
-            if (a.parseAddress(address)) {
-                return a;
-            }
-        } catch (Exception ex) {
-            logger.error(ex);
-        }
-        return null;
-    }
-
-    public boolean equals(Object o) {
-        return (o instanceof TlsAddress) && super.equals(o);
-    }
+  public boolean equals(Object o) {
+    return (o instanceof TlsAddress) && super.equals(o);
+  }
 
 }
 

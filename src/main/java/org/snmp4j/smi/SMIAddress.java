@@ -1,8 +1,8 @@
 /*_############################################################################
   _## 
-  _##  SNMP4J - SMIAddress.java  
+  _##  SNMP4J 2 - SMIAddress.java  
   _## 
-  _##  Copyright (C) 2003-2018  Frank Fock and Jochen Katz (SNMP4J.org)
+  _##  Copyright (C) 2003-2016  Frank Fock and Jochen Katz (SNMP4J.org)
   _##  
   _##  Licensed under the Apache License, Version 2.0 (the "License");
   _##  you may not use this file except in compliance with the License.
@@ -30,5 +30,4 @@ package org.snmp4j.smi;
  */
 public abstract class SMIAddress extends AbstractVariable implements Address {
 
-    private static final long serialVersionUID = -8164737880299490305L;
 }

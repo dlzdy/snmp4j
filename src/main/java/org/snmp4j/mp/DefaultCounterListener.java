@@ -1,8 +1,8 @@
 /*_############################################################################
   _## 
-  _##  SNMP4J - DefaultCounterListener.java  
+  _##  SNMP4J 2 - DefaultCounterListener.java  
   _## 
-  _##  Copyright (C) 2003-2018  Frank Fock and Jochen Katz (SNMP4J.org)
+  _##  Copyright (C) 2003-2016  Frank Fock and Jochen Katz (SNMP4J.org)
   _##  
   _##  Licensed under the Apache License, Version 2.0 (the "License");
   _##  you may not use this file except in compliance with the License.
@@ -77,9 +77,9 @@ public class DefaultCounterListener implements CounterListener {
 
   /**
    * Adds a counter to this counter listener. If counter
-   * events have been received already for the given <code>oid</code>
+   * events have been received already for the given <tt>oid</tt>
    * the provided counter will be incremented by the number of events
-   * already counted and then <code>counter</code> replaces the old
+   * already counted and then <tt>counter</tt> replaces the old
    * counter.
    * @param oid
    *    the object identifier of the counter instance (thus including
@@ -87,8 +87,8 @@ public class DefaultCounterListener implements CounterListener {
    * @param counter
    *    the counter to register.
    * @return
-   *    the counter previously associated with <code>oid</code> or
-   *    <code>null</code> if no such counter exist.
+   *    the counter previously associated with <tt>oid</tt> or
+   *    <tt>null</tt> if no such counter exist.
    * @since 2.0
    */
   public synchronized Counter32 add(OID oid, Counter32 counter) {
@@ -106,8 +106,8 @@ public class DefaultCounterListener implements CounterListener {
    *    the object identifier of the counter instance (thus including
    *    the .0 suffix).
    * @return
-   *    the counter previously associated with <code>oid</code> or
-   *    <code>null</code> if no such counter exist.
+   *    the counter previously associated with <tt>oid</tt> or
+   *    <tt>null</tt> if no such counter exist.
    * @since 2.0
    */
   public synchronized Counter32 remove(OID oid) {
@@ -122,7 +122,7 @@ public class DefaultCounterListener implements CounterListener {
    * Sets the flag which indicates how unregistered counter events
    * should be handled.
    * @param countRegisteredOnly
-   *    if <code>true</code> counter events for OIDs which have not been
+   *    if <tt>true</tt> counter events for OIDs which have not been
    *    added by {@link #add} will be ignored, otherwise a
    *    {@link Counter32} will be registered to count corresponding
    *    events.

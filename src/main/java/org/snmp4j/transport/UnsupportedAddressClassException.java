@@ -1,8 +1,8 @@
 /*_############################################################################
   _## 
-  _##  SNMP4J - UnsupportedAddressClassException.java  
+  _##  SNMP4J 2 - UnsupportedAddressClassException.java  
   _## 
-  _##  Copyright (C) 2003-2018  Frank Fock and Jochen Katz (SNMP4J.org)
+  _##  Copyright (C) 2003-2016  Frank Fock and Jochen Katz (SNMP4J.org)
   _##  
   _##  Licensed under the Apache License, Version 2.0 (the "License");
   _##  you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@
 package org.snmp4j.transport;
 
 import org.snmp4j.MessageException;
-import org.snmp4j.smi.Address;
 
 /**
  * The <code>UnsupportedAddressClassException</code> indicates a message
@@ -35,9 +34,9 @@ public class UnsupportedAddressClassException extends MessageException {
 
   private static final long serialVersionUID = -864696255672171900L;
 
-  private Class<? extends Address> addressClass;
+  private Class addressClass;
 
-  public UnsupportedAddressClassException(String message, Class<? extends Address> addressClass) {
+  public UnsupportedAddressClassException(String message, Class addressClass) {
     super(message);
     this.addressClass = addressClass;
   }
@@ -47,7 +46,7 @@ public class UnsupportedAddressClassException extends MessageException {
    * @return
    *    a Class.
    */
-  public Class<? extends Address> getAddressClass() {
+  public Class getAddressClass() {
     return addressClass;
   }
 }

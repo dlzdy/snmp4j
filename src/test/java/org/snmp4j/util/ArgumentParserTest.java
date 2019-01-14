@@ -209,7 +209,7 @@ public class ArgumentParserTest {
     assertEquals("usmUser", commandSet[0]);
     ArgumentParser parser =
         new ArgumentParser(commandSet[1], commandSet[2]);
-    Map<String,List<Object>> commandLineParameters = parser.parse(args);
+    Map<String,List<?>> commandLineParameters = parser.parse(args);
     assertEquals("low", commandLineParameters.get("rsl").get(0));
     //System.out.println(commandLineParameters);
   }
@@ -221,7 +221,7 @@ public class ArgumentParserTest {
     assertEquals("{address=ArgumentFormat[option=address,parameter=true,vararg=true,mandatatory=true,"+
         "parameters=[ArgumentParameter[name=,type=2,patttern=(udp|tcp):.*[/[0-9]+]?,defaultValue=udp:127.0.0.1/161]]]}",
         argumentParser.getParameterFormat().toString());
-    Map<String,List<Object>> commandLineParameters = argumentParser.parse(new String[] { });
+    Map<String,List<?>> commandLineParameters = argumentParser.parse(new String[] { });
     assertTrue(commandLineParameters.containsKey("address"));
   }
 

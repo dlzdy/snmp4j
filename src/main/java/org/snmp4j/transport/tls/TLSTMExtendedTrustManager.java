@@ -1,21 +1,21 @@
 /*_############################################################################
-  _## 
-  _##  SNMP4J - TLSTMExtendedTrustManager.java  
-  _## 
-  _##  Copyright (C) 2003-2018  Frank Fock and Jochen Katz (SNMP4J.org)
-  _##  
+  _##
+  _##  SNMP4J 2 - TLSTMExtendedTrustManager.java
+  _##
+  _##  Copyright (C) 2003-2017  Frank Fock and Jochen Katz (SNMP4J.org)
+  _##
   _##  Licensed under the Apache License, Version 2.0 (the "License");
   _##  you may not use this file except in compliance with the License.
   _##  You may obtain a copy of the License at
-  _##  
+  _##
   _##      http://www.apache.org/licenses/LICENSE-2.0
-  _##  
+  _##
   _##  Unless required by applicable law or agreed to in writing, software
   _##  distributed under the License is distributed on an "AS IS" BASIS,
   _##  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   _##  See the License for the specific language governing permissions and
   _##  limitations under the License.
-  _##  
+  _##
   _##########################################################################*/
 
 package org.snmp4j.transport.tls;
@@ -24,10 +24,10 @@ import org.snmp4j.TransportStateReference;
 import org.snmp4j.event.CounterEvent;
 import org.snmp4j.log.LogAdapter;
 import org.snmp4j.log.LogFactory;
-import org.snmp4j.mp.CounterSupport;
 import org.snmp4j.mp.SnmpConstants;
 import org.snmp4j.smi.IpAddress;
 import org.snmp4j.smi.OctetString;
+import org.snmp4j.transport.TLSTM;
 
 import javax.net.ssl.SSLEngine;
 import javax.net.ssl.X509ExtendedTrustManager;
@@ -53,15 +53,11 @@ public class TLSTMExtendedTrustManager extends X509ExtendedTrustManager {
   X509TrustManager trustManager;
   private boolean useClientMode;
   private TransportStateReference tmStateReference;
-  private CounterSupport tlstmCounters;
-  private TlsTmSecurityCallback<X509Certificate> securityCallback;
+  private TLSTM tlstm;
 
-  public TLSTMExtendedTrustManager(CounterSupport tlstmCounters,
-                                   TlsTmSecurityCallback<X509Certificate> securityCallback,
-                                   X509TrustManager trustManager,
+  public TLSTMExtendedTrustManager(TLSTM tlstm, X509TrustManager trustManager,
                                    boolean useClientMode, TransportStateReference tmStateReference) {
-    this.tlstmCounters = tlstmCounters;
-    this.securityCallback = securityCallback;
+    this.tlstm = tlstm;
     this.trustManager = trustManager;
     this.useClientMode = useClientMode;
     this.tmStateReference = tmStateReference;
@@ -75,8 +71,8 @@ public class TLSTMExtendedTrustManager extends X509ExtendedTrustManager {
       trustManager.checkClientTrusted(x509Certificates, s);
     }
     catch (CertificateException cex) {
-      tlstmCounters.fireIncrementCounter(new CounterEvent(this, SnmpConstants.snmpTlstmSessionOpenErrors));
-      tlstmCounters.fireIncrementCounter(new CounterEvent(this, SnmpConstants.snmpTlstmSessionInvalidClientCertificates));
+      tlstm.getCounterSupport().fireIncrementCounter(new CounterEvent(this, SnmpConstants.snmpTlstmSessionOpenErrors));
+      tlstm.getCounterSupport().fireIncrementCounter(new CounterEvent(this, SnmpConstants.snmpTlstmSessionInvalidClientCertificates));
       logger.warn("Client certificate validation failed for '"+x509Certificates[0]+"'");
       throw cex;
     }
@@ -89,8 +85,8 @@ public class TLSTMExtendedTrustManager extends X509ExtendedTrustManager {
       trustManager.checkServerTrusted(x509Certificates, s);
     }
     catch (CertificateException cex) {
-      tlstmCounters.fireIncrementCounter(new CounterEvent(this, SnmpConstants.snmpTlstmSessionOpenErrors));
-      tlstmCounters.fireIncrementCounter(new CounterEvent(this, SnmpConstants.snmpTlstmSessionUnknownServerCertificate));
+      tlstm.getCounterSupport().fireIncrementCounter(new CounterEvent(this, SnmpConstants.snmpTlstmSessionOpenErrors));
+      tlstm.getCounterSupport().fireIncrementCounter(new CounterEvent(this, SnmpConstants.snmpTlstmSessionUnknownServerCertificate));
       logger.warn("Server certificate validation failed for '"+x509Certificates[0]+"'");
       throw cex;
     }
@@ -101,7 +97,7 @@ public class TLSTMExtendedTrustManager extends X509ExtendedTrustManager {
     if ((fingerprint != null) && (fingerprint.length() > 0)) {
       for (X509Certificate cert : x509Certificates) {
         OctetString certFingerprint = null;
-        certFingerprint = TLSTMUtil.getFingerprint(cert);
+        certFingerprint = TLSTM.getFingerprint(cert);
         if (logger.isDebugEnabled()) {
           logger.debug("Comparing certificate fingerprint "+certFingerprint+
               " with "+fingerprint);
@@ -123,15 +119,16 @@ public class TLSTMExtendedTrustManager extends X509ExtendedTrustManager {
 
   @Override
   public X509Certificate[] getAcceptedIssuers() {
+    TlsTmSecurityCallback<X509Certificate> callback = tlstm.getSecurityCallback();
     X509Certificate[] accepted = trustManager.getAcceptedIssuers();
-    if ((accepted != null) && (securityCallback != null)) {
+    if ((accepted != null) && (callback != null)) {
       ArrayList<X509Certificate> acceptedIssuers = new ArrayList<X509Certificate>(accepted.length);
       for (X509Certificate cert : accepted) {
-        if (securityCallback.isAcceptedIssuer(cert)) {
+        if (callback.isAcceptedIssuer(cert)) {
           acceptedIssuers.add(cert);
         }
       }
-      return acceptedIssuers.toArray(new X509Certificate[0]);
+      return acceptedIssuers.toArray(new X509Certificate[acceptedIssuers.size()]);
     }
     return accepted;
   }
@@ -150,8 +147,8 @@ public class TLSTMExtendedTrustManager extends X509ExtendedTrustManager {
       }
     }
     catch (CertificateException cex) {
-      tlstmCounters.fireIncrementCounter(new CounterEvent(this, SnmpConstants.snmpTlstmSessionOpenErrors));
-      tlstmCounters.fireIncrementCounter(new CounterEvent(this, SnmpConstants.snmpTlstmSessionInvalidClientCertificates));
+      tlstm.getCounterSupport().fireIncrementCounter(new CounterEvent(this, SnmpConstants.snmpTlstmSessionOpenErrors));
+      tlstm.getCounterSupport().fireIncrementCounter(new CounterEvent(this, SnmpConstants.snmpTlstmSessionInvalidClientCertificates));
       logger.warn("Client certificate validation failed for '"+x509Certificates[0]+"'");
       throw cex;
     }
@@ -171,8 +168,8 @@ public class TLSTMExtendedTrustManager extends X509ExtendedTrustManager {
       }
     }
     catch (CertificateException cex) {
-      tlstmCounters.fireIncrementCounter(new CounterEvent(this, SnmpConstants.snmpTlstmSessionOpenErrors));
-      tlstmCounters.fireIncrementCounter(new CounterEvent(this, SnmpConstants.snmpTlstmSessionUnknownServerCertificate));
+      tlstm.getCounterSupport().fireIncrementCounter(new CounterEvent(this, SnmpConstants.snmpTlstmSessionOpenErrors));
+      tlstm.getCounterSupport().fireIncrementCounter(new CounterEvent(this, SnmpConstants.snmpTlstmSessionUnknownServerCertificate));
       logger.warn("Server certificate validation failed for '"+x509Certificates[0]+"'");
       throw cex;
     }
@@ -180,8 +177,9 @@ public class TLSTMExtendedTrustManager extends X509ExtendedTrustManager {
   }
 
   private void postCheckServerTrusted(X509Certificate[] x509Certificates) throws CertificateException {
-    if (useClientMode && (securityCallback != null)) {
-      if (!securityCallback.isServerCertificateAccepted(x509Certificates)) {
+    TlsTmSecurityCallback<X509Certificate> callback = tlstm.getSecurityCallback();
+    if (useClientMode && (callback != null)) {
+      if (!callback.isServerCertificateAccepted(x509Certificates)) {
         logger.info("Server is NOT trusted with certificate '"+ Arrays.asList(x509Certificates)+"'");
         throw new CertificateException("Server's certificate is not trusted by this application (although it was trusted by the JRE): "+
         Arrays.asList(x509Certificates));
@@ -196,7 +194,7 @@ public class TLSTMExtendedTrustManager extends X509ExtendedTrustManager {
     }
     Object entry = null;
     try {
-      entry = TLSTMUtil.getSubjAltName(x509Certificates[0].getSubjectAlternativeNames(), 2);
+      entry = TLSTM.getSubjAltName(x509Certificates[0].getSubjectAlternativeNames(), 2);
     } catch (CertificateParsingException e) {
       logger.error("CertificateParsingException while verifying server certificate "+
           Arrays.asList(x509Certificates));
@@ -245,8 +243,8 @@ public class TLSTMExtendedTrustManager extends X509ExtendedTrustManager {
       }
     }
     catch (CertificateException cex) {
-      tlstmCounters.fireIncrementCounter(new CounterEvent(this, SnmpConstants.snmpTlstmSessionOpenErrors));
-      tlstmCounters.fireIncrementCounter(new CounterEvent(this, SnmpConstants.snmpTlstmSessionInvalidClientCertificates));
+      tlstm.getCounterSupport().fireIncrementCounter(new CounterEvent(this, SnmpConstants.snmpTlstmSessionOpenErrors));
+      tlstm.getCounterSupport().fireIncrementCounter(new CounterEvent(this, SnmpConstants.snmpTlstmSessionInvalidClientCertificates));
       logger.warn("Client certificate validation failed for '"+x509Certificates[0]+"'");
       throw cex;
     }
@@ -259,8 +257,9 @@ public class TLSTMExtendedTrustManager extends X509ExtendedTrustManager {
         return true;
       }
     }
-    if (!useClientMode && (securityCallback != null)) {
-      if (securityCallback.isClientCertificateAccepted(x509Certificates[0])) {
+    TlsTmSecurityCallback<X509Certificate> callback = tlstm.getSecurityCallback();
+    if (!useClientMode && (callback != null)) {
+      if (callback.isClientCertificateAccepted(x509Certificates[0])) {
         if (logger.isInfoEnabled()) {
           logger.info("Client is trusted with certificate '"+x509Certificates[0]+"'");
         }
@@ -284,8 +283,8 @@ public class TLSTMExtendedTrustManager extends X509ExtendedTrustManager {
       }
     }
     catch (CertificateException cex) {
-      tlstmCounters.fireIncrementCounter(new CounterEvent(this, SnmpConstants.snmpTlstmSessionOpenErrors));
-      tlstmCounters.fireIncrementCounter(new CounterEvent(this, SnmpConstants.snmpTlstmSessionUnknownServerCertificate));
+      tlstm.getCounterSupport().fireIncrementCounter(new CounterEvent(this, SnmpConstants.snmpTlstmSessionOpenErrors));
+      tlstm.getCounterSupport().fireIncrementCounter(new CounterEvent(this, SnmpConstants.snmpTlstmSessionUnknownServerCertificate));
       logger.warn("Server certificate validation failed for '"+x509Certificates[0]+"'");
       throw cex;
     }
